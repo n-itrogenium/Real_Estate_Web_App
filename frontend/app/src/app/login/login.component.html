@@ -1,0 +1,22 @@
+<form>
+    <table>
+        <tr>
+            <td>Korisničko ime:</td>
+            <td>
+                <input type='text' name='username' [(ngModel)]='username'>
+            </td>
+        </tr>
+        <tr>
+            <td>Lozinka:</td>
+            <td>
+                <input type='password' name='password' [(ngModel)]='password'>
+            </td>
+        </tr>
+        <tr>
+            <td colspan='2'>
+                <button (click)='signIn()'>Sign In</button>
+            </td>
+        </tr>
+    </table>
+    Nemate nalog? Registrujte se <a routerLink='register'>ovde</a> ili <a routerLink='guest'>nastavite kao gost</a>.
+</form>

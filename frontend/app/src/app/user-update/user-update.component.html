@@ -1,0 +1,85 @@
+<button (click)='logOut()'>Odjava</button>
+
+<!--------------------------------AŽURIRANJE PODATAKA-------------------------------->
+
+<form>
+    <th>Ažuriranje podataka korisnika {{user.username}}</th>
+
+    <tr>
+        <td>Ime:</td>
+        <td>
+            <input type='text' name='name' value='{{user.name}}' [(ngModel)]='user.name'>
+        </td>
+    </tr>
+    <tr>
+        <td>Prezime:</td>
+        <td>
+            <input type='text' name='surname' value='{{user.surname}}' [(ngModel)]='user.surname'>
+        </td>
+    </tr>
+    <tr>
+        <td>Profilna slika:</td> 
+        <td><img src='{{user.avatar}}' height='100'></td>
+        <td>
+            <input type='file' name='avatar' accept='image/*' (change)='onFileSelected($event)'>
+        </td>
+    </tr>
+    <tr>
+        <td>E-mail adresa:</td>
+        <td>
+            <input type='text' name='mail' value='{{user.mail}}' [(ngModel)]='user.mail'>
+        </td>
+    </tr>
+    <tr>
+        <td>Mesto stanovanja:</td>
+        <td>
+            <input type='text' name='city' value='{{user.city}}' [(ngModel)]='user.city'>
+        </td>
+    </tr>
+    <tr>
+        <td>Država:</td>
+        <td>
+            <input type='text' name='country' value='{{user.country}}' [(ngModel)]='user.country'>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2">
+            <button (click)='updateUser()'>Ažuriraj podatke</button>
+        </td>
+    </tr>
+</form>
+
+
+<!--------------------------------PROMENA LOZINKE-------------------------------->
+
+<form>
+    <th>Postavljanje nove lozinke</th>
+
+    <tr>
+        <td>Stara lozinka:</td>
+        <td>
+            <input type='password' name='oldpassword' [(ngModel)]='old_password'>
+        </td>
+    </tr>
+
+    <tr>
+        <td>Nova lozinka:</td>
+        <td>
+            <input type='password' name='newpassword' [(ngModel)]='new_password'>
+        </td>
+    </tr>
+
+    <tr>
+        <td>Potvrdite lozinku:</td>
+        <td>
+            <input type='password' name='password' [(ngModel)]='new_password_2'>
+        </td>
+    </tr>
+
+    <tr>
+        <td colspan="2">
+            <button (click)='changePassword()'>Promeni lozinku</button>
+        </td>
+    </tr>
+
+</form>

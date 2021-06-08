@@ -1,0 +1,59 @@
+<table>
+    <tr>
+        <td>{{real_estate.name}}</td>
+    </tr>
+    
+    <tr>
+        <td>{{real_estate.address}}, {{real_estate.municipality}}, {{real_estate.city}}</td>
+    </tr>
+
+    <tr>
+        <td *ngIf='real_estate.sale==0'>Izdavanje</td>
+        <td *ngIf='real_estate.sale==1'>Prodaja</td>
+    </tr>
+
+    <tr>
+        <td>Tip:</td>
+        <td *ngIf='real_estate.type==0'>Kuća</td>
+        <td *ngIf='real_estate.type==1'>Stan</td>
+    </tr>
+
+    <tr>
+        <td *ngIf='real_estate.type==0'>Broj spratova:</td>
+        <td *ngIf='real_estate.type==1'>Broj spratova zgrade:</td>
+        <td>{{real_estate.height}}</td>
+    </tr>
+
+    <tr *ngIf='real_estate.type==1'>
+        <td>Sprat:</td>
+        <td>{{real_estate.floor}}</td>
+    </tr>
+
+    <tr>
+        <td>Kvadratura:</td>
+        <td>{{real_estate.squaremeters}} m2</td>
+    </tr>
+
+    <tr>
+        <td>Broj soba:</td>
+        <td *ngIf='real_estate.rooms==0'>Garsonjera</td>
+        <td *ngIf='real_estate.rooms>0'>{{real_estate.rooms}}</td>
+    </tr>
+
+    <tr>
+        <td>Namešten:</td>
+        <td *ngIf='real_estate.furnished'>Da</td>
+        <td *ngIf='!real_estate.furnished'>Ne</td>
+    </tr>
+
+    <tr>
+        <td *ngIf='real_estate.sale==0'>Cena mesečnog najma:</td>
+        <td *ngIf='real_estate.sale==1'>Cena:</td>
+        <td>{{real_estate.price}} €</td>
+    </tr>
+
+    <tr>
+        <td>Vlasnik:</td>
+        <td>{{real_estate.owner}}</td>
+    </tr>
+</table>

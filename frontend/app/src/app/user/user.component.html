@@ -1,0 +1,115 @@
+<a routerLink='update'>Izmeni svoje podatke</a>
+<br>
+<a routerLink='addRealEstate'>Dodaj svoju nekretninu</a>
+<br>
+<a routerLink='myRealEstate'>Pregledaj svoje nekretnine</a>
+<br>
+
+<!-----------------------------PROMOVISANE NEKRETNINE----------------------------->
+<h1>Za vas smo izdvojili</h1>
+<ng-container *ngFor='let re of real_estate'>
+    <table *ngIf='re.promo'>
+        <tr>{{re.name}}</tr>
+        <tr><button (click)='openPage(re)'>Pregledaj nekretninu</button></tr>
+    </table>
+</ng-container>
+
+
+
+<!--------------------------------UNOŠENJE FILTERA-------------------------------->
+<h3>Pretraži nekretnine:</h3>
+<form>
+    <tr>
+        <td>Grad:</td>
+        <td><input type='text' name='city' [(ngModel)]='searchCity'></td>
+    </tr>
+
+    <tr>
+        <td>Opseg cena:</td>
+        <td><input type='number' name='min' placeholder='Minimalna cena' [(ngModel)]='minPrice'></td>
+        <td><input type='number' name='max' placeholder='Maksimalna cena' [(ngModel)]='maxPrice'></td>
+    </tr>
+
+    <tr>
+        <td>
+            <button (click)='search()'>Pretraži</button>
+        </td>
+    </tr>
+</form>
+
+
+<!-------------------------------REZULTATI PRETRAGE------------------------------->
+
+<h1>Pronađene nekretnine</h1>
+<ng-container *ngFor='let re of real_estate'>
+    <ng-container *ngIf='(applyCityFilter && re.city == findCity) || !applyCityFilter'>
+        <ng-container *ngIf='(applyMinPriceFilter && re.price >= findMinPrice) || !applyMinPriceFilter'>
+            <table *ngIf='(applyMaxPriceFilter && findMaxPrice >= re.price) || !applyMaxPriceFilter'>
+                <tr>
+                    <td>{{re.name}}</td>
+                </tr>
+                
+                <tr>
+                    <td>{{re.address}}, {{re.municipality}}, {{re.city}}</td>
+                </tr>
+
+                <tr>
+                    <td *ngIf='re.sale==0'>Izdavanje</td>
+                    <td *ngIf='re.sale==1'>Prodaja</td>
+                </tr>
+
+                <tr>
+                    <td>Tip:</td>
+                    <td *ngIf='re.type==0'>Kuća</td>
+                    <td *ngIf='re.type==1'>Stan</td>
+                </tr>
+
+                <tr>
+                    <td *ngIf='re.type==0'>Broj spratova:</td>
+                    <td *ngIf='re.type==1'>Broj spratova zgrade:</td>
+                    <td>{{re.height}}</td>
+                </tr>
+
+                <tr>
+                    <td *ngIf='re.type==1'>Sprat:</td>
+                    <td>{{re.floor}}</td>
+                </tr>
+
+                <tr>
+                    <td>Kvadratura:</td>
+                    <td>{{re.squaremeters}} m2</td>
+                </tr>
+
+                <tr>
+                    <td>Broj soba:</td>
+                    <td *ngIf='re.rooms==0'>Garsonjera</td>
+                    <td *ngIf='re.rooms>0'>{{re.rooms}}</td>
+                </tr>
+
+                <tr>
+                    <td>Namešten:</td>
+                    <td *ngIf='re.furnished'>Da</td>
+                    <td *ngIf='!re.furnished'>Ne</td>
+                </tr>
+
+                <tr>
+                    <td *ngIf='re.sale==0'>Cena mesečnog najma:</td>
+                    <td *ngIf='re.sale==1'>Cena:</td>
+                    <td>{{re.price}} €</td>
+                </tr>
+
+                <tr>
+                    <td>Vlasnik:</td>
+                    <td>{{re.owner}}</td>
+                </tr>
+
+                <tr><button (click)='openPage(re)'>Pregledaj nekretninu</button></tr>
+
+                <br><br><br>
+                
+            </table>
+        </ng-container>
+    </ng-container>
+</ng-container>
+
+
