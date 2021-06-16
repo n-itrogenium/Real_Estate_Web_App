@@ -11,7 +11,10 @@ import { AgentUpdateReComponent } from './agent-update-re/agent-update-re.compon
 import { AgentUpdateComponent } from './agent-update/agent-update.component';
 import { AgentComponent } from './agent/agent.component';
 import { GuestComponent } from './guest/guest.component';
+import { InboxComponent } from './inbox/inbox.component';
 import { LoginComponent } from './login/login.component';
+import { MsgComposeComponent } from './msg-compose/msg-compose.component';
+import { MsgthreadComponent } from './msgthread/msgthread.component';
 import { RealEstateComponent } from './real-estate/real-estate.component';
 import { RegisterComponent } from './register/register.component';
 import { UserAddReComponent } from './user-add-re/user-add-re.component';
@@ -38,6 +41,9 @@ const routes: Routes = [
   {path: 'agent/manageRealEstate/updateRealEstate', component: AgentUpdateReComponent},
   {path: 'agent/update', component: AgentUpdateComponent},
   {path: 'guest', component: GuestComponent},
+  {path: 'inbox', component: InboxComponent},
+  {path: 'msgthread', component: MsgthreadComponent},
+  {path: 'composeMessage', component: MsgComposeComponent},
   {path: 'register', component: RegisterComponent},
   {path: 'realestate', component: RealEstateComponent}
 ];

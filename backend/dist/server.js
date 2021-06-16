@@ -10,6 +10,7 @@ const mongoose_1 = __importDefault(require("mongoose"));
 const user_routes_1 = __importDefault(require("./routes/user.routes"));
 const admin_routes_1 = __importDefault(require("./routes/admin.routes"));
 const real_estate_routes_1 = __importDefault(require("./routes/real-estate.routes"));
+const msg_routes_1 = __importDefault(require("./routes/msg.routes"));
 const app = express_1.default();
 app.use(cors_1.default());
 app.use(body_parser_1.default.json()); //podaci se razmenjuju u JSON formatu
@@ -22,6 +23,7 @@ const router = express_1.default.Router(); //ruter prihvata http zahteve
 router.use('/users', user_routes_1.default); //rutu za korisnike obrađuje ruter za korisnike
 router.use('/admin', admin_routes_1.default);
 router.use('/realestate', real_estate_routes_1.default);
+router.use('/msg', msg_routes_1.default);
 app.use('/', router);
 app.listen(4000, () => console.log(`Express server running on port 4000`));
 //# sourceMappingURL=server.js.map

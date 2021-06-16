@@ -30,6 +30,9 @@ import { AgentUpdateComponent } from './agent-update/agent-update.component';
 import { AgentAddReComponent } from './agent-add-re/agent-add-re.component';
 import { AgentMyReComponent } from './agent-my-re/agent-my-re.component';
 import { AgentUpdateReComponent } from './agent-update-re/agent-update-re.component';
+import { InboxComponent } from './inbox/inbox.component';
+import { MsgthreadComponent } from './msgthread/msgthread.component';
+import { MsgComposeComponent } from './msg-compose/msg-compose.component';
 
 @NgModule({
   declarations: [
@@ -52,7 +55,10 @@ import { AgentUpdateReComponent } from './agent-update-re/agent-update-re.compon
     AgentUpdateComponent,
     AgentAddReComponent,
     AgentMyReComponent,
-    AgentUpdateReComponent
+    AgentUpdateReComponent,
+    InboxComponent,
+    MsgthreadComponent,
+    MsgComposeComponent
   ],
   imports: [
     BrowserModule,

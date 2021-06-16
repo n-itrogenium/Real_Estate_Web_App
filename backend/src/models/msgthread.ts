@@ -2,16 +2,11 @@ import mongoose from 'mongoose';
 
 const Schema = mongoose.Schema;
 
-class Message {
-    to: string;
-    from: string;
-    timestamp: Date;
-    read: boolean;
-    content: string;
-}
-
 let MsgThread = new Schema(
     {
+        _id: {
+            type: String
+        },
         subject: {
             type: String,
             required: true
@@ -28,12 +23,17 @@ let MsgThread = new Schema(
             type: Boolean,
             required: true
         },
-        read: {
+        read1: {
             type: Boolean,
             required: true
         },
-        messages: {
-            type: Array<Message>()
+        read2: {
+            type: Boolean,
+            required: true
+        },
+        timestamp: {
+            type: Date,
+            required: true
         }
     }
 );

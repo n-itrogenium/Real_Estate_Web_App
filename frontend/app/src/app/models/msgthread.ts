@@ -1,10 +1,10 @@
-import { Message } from "./message";
-
 export class MsgThread {
+    _id: string;
     subject: string;
     user1: string;
     user2: string;
     active: boolean;
-    read: boolean;
-    messages: Message[];
+    read1: boolean;
+    read2: boolean;
+    timestamp: Date;
 }

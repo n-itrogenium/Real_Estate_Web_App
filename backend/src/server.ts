@@ -5,6 +5,7 @@ import mongoose from 'mongoose';
 import userRouter from './routes/user.routes';
 import adminRouter from './routes/admin.routes';
 import realEstateRouter from './routes/real-estate.routes';
+import msgRouter from './routes/msg.routes';
 
 const app = express();
 
@@ -21,6 +22,7 @@ const router = express.Router(); //ruter prihvata http zahteve
 router.use('/users', userRouter); //rutu za korisnike obrađuje ruter za korisnike
 router.use('/admin', adminRouter);
 router.use('/realestate', realEstateRouter);
+router.use('/msg', msgRouter);
 
 app.use('/', router);
 app.listen(4000, () => console.log(`Express server running on port 4000`));

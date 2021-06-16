@@ -1,0 +1,27 @@
+<h1>Konverzacija: {{thread.subject}}</h1>
+<button *ngIf='thread.active' (click)='archiveThread()'>Arhiviraj konverzaciju</button>
+<button *ngIf='!thread.active' (click)='archiveThread()'>Vrati konverzaciju iz arhive</button>
+
+<table *ngFor='let m of messages'>
+    <tr>
+        <td>{{m.from}} ({{m.timestamp | date: 'dd. MM. yyyy. u HH.mm' }}):</td>
+    </tr>
+
+    <tr>
+        <td>{{m.content}}</td>
+    </tr>
+
+</table>
+
+<form>
+    <tr>
+        <td>Odgovori:</td>
+        <td><textarea name='content' [(ngModel)]='content'></textarea></td>
+    </tr>
+
+    <tr>
+        <td colspan='2'>
+            <button (click)='send()'>Pošalji</button>
+        </td>
+    </tr>
+</form>

@@ -1,0 +1,26 @@
+<form>
+    <th *ngIf='real_estate==null'>Kreiraj novu poruku</th>
+    <th *ngIf='real_estate!=null'>Poruka za vlasnika nekretnine {{real_estate.name}}</th>
+    
+    <tr *ngIf='real_estate==null'>
+        <td>Primalac:</td>
+        <td><input type='text' name='to' [(ngModel)]='to'></td>
+    </tr>
+
+    <tr *ngIf='real_estate==null'>
+        <td>Naslov:</td>
+        <td><input type='text' name='subject' [(ngModel)]='subject'></td>
+    </tr>
+
+    <tr>
+        <td>Poruka:</td>
+        <td><textarea name='content' [(ngModel)]='content'></textarea></td>
+    </tr>
+
+    <tr>
+        <td colspan='2'>
+            <button (click)='send()'>Pošalji</button>
+        </td>
+    </tr>
+
+</form>

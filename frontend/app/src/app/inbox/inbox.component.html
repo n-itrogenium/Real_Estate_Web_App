@@ -1,0 +1,93 @@
+<button routerLink='/composeMessage'>Nova poruka</button>
+<br><br>
+
+<button (click)='changeTab("active")'>Konverzacije</button>
+<button (click)='changeTab("archive")'>Arhiva</button>
+<br><br>
+
+<!-------------------------------AKTIVNE KONVERZACIJE------------------------------->
+
+<ng-container *ngIf='currentTab=="active"'>
+    <h1>Aktivne poruke</h1>
+    <table *ngFor='let t of threads'>
+        <ng-container *ngIf='t.active'>
+
+            <tr>
+                <td>
+                    <a routerLink='/msgthread' (click)='openThread(t)'>{{t.subject}}</a>
+                </td>
+            </tr>
+
+            <tr>
+                <td *ngIf='t.user1 != user.username'>
+                    {{t.user1}}
+                    <br>
+                    <p *ngIf='!t.read2' style='color: red'>NEPROČITANO</p>
+                </td>
+
+                <td *ngIf='t.user2 != user.username'>
+                    {{t.user2}}
+                    <br>
+                    <p *ngIf='!t.read1' style='color: red'>NEPROČITANO</p>
+                </td>
+            </tr>
+
+            <tr>
+                <td>{{t.timestamp | date: 'dd. MM. yyyy. u HH.mm' }}</td>
+            </tr>
+
+            <tr>
+                <td>
+                    <button (click)='archiveThread(t)'>Arhiviraj konverzaciju</button>
+                </td>
+            </tr>
+
+        </ng-container>
+
+    </table>
+</ng-container>
+
+
+
+
+<!-----------------------------ARHIVIRANE KONVERZACIJE------------------------------>
+
+<ng-container *ngIf='currentTab=="archive"'>
+    <h1>Arhivirane poruke</h1>
+    <table *ngFor='let t of threads'>
+        <ng-container *ngIf='!t.active'>
+
+            <tr>
+                <td>
+                    <a routerLink='/msgthread' (click)='openThread(t)'>{{t.subject}}</a>
+                </td>
+            </tr>
+
+            <tr>
+                <td *ngIf='t.user1 != user.username'>
+                    {{t.user1}}
+                    <br>
+                    <p *ngIf='!t.read2' style='color: red'>NEPROČITANO</p>
+                </td>
+
+                <td *ngIf='t.user2 != user.username'>
+                    {{t.user2}}
+                    <br>
+                    <p *ngIf='!t.read1' style='color: red'>NEPROČITANO</p>
+                </td>
+            </tr>
+
+            <tr>
+                <td>{{t.timestamp | date: 'dd. MM. yyyy. u HH.mm' }}</td>
+            </tr>
+
+            <tr>
+                <td>
+                    <button (click)='archiveThread(t)'>Vrati iz arhive</button>
+                </td>
+            </tr>
+
+        </ng-container>
+
+    </table>
+</ng-container>
