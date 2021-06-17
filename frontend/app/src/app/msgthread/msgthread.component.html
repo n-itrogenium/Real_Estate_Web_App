@@ -1,10 +1,29 @@
 <h1>Konverzacija: {{thread.subject}}</h1>
-<button *ngIf='thread.active' (click)='archiveThread()'>Arhiviraj konverzaciju</button>
-<button *ngIf='!thread.active' (click)='archiveThread()'>Vrati konverzaciju iz arhive</button>
+<div *ngIf='block == null'>
+    <button *ngIf='thread.active' (click)='archiveThread()'>Arhiviraj konverzaciju</button>
+    <button *ngIf='!thread.active' (click)='archiveThread()'>Vrati konverzaciju iz arhive</button>
+</div>
 
 <table *ngFor='let m of messages'>
+    <ng-container *ngIf='thread.realestate != null'>
+        <tr *ngIf='m.from != loggedUser'>
+            <td *ngIf='owner'>Kupac {{m.from}}</td>
+            <td *ngIf='!owner'>Vlasnik nekretnine</td>
+        </tr>
+
+        <tr *ngIf='m.from == loggedUser'>
+            <td>Ja</td>
+        </tr>
+    </ng-container>
+
+    <ng-container *ngIf='thread.realestate == null'>
+        <tr>
+            <td>{{m.from}}</td>
+        </tr>
+    </ng-container>
+
     <tr>
-        <td>{{m.from}} ({{m.timestamp | date: 'dd. MM. yyyy. u HH.mm' }}):</td>
+        <td>({{m.timestamp | date: 'dd. MM. yyyy. u HH.mm' }}):</td>
     </tr>
 
     <tr>
@@ -13,7 +32,7 @@
 
 </table>
 
-<form>
+<form *ngIf='block == null'>
     <tr>
         <td>Odgovori:</td>
         <td><textarea name='content' [(ngModel)]='content'></textarea></td>
@@ -24,4 +43,14 @@
             <button (click)='send()'>Pošalji</button>
         </td>
     </tr>
+
+    <button (click)='blockUser()'>Blokiraj korisnika</button>
 </form>
+
+<div *ngIf='block != null && block.blocker == loggedUser'>
+    <p>Nije moguće nastaviti konverzaciju zato što ste blokirali korisnika.</p>
+    <button (click)='unblockUser()'>Odblokiraj korisnika</button>
+</div>
+
+<p *ngIf='block != null && block.blocked == loggedUser'>Nije moguće nastaviti konverzaciju zato što vas je korisnik
+    blokirao.</p>

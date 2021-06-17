@@ -5,6 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserController = void 0;
 const user_1 = __importDefault(require("../models/user"));
+const block_1 = __importDefault(require("../models/block"));
 class UserController {
     constructor() {
         this.login = (req, res) => {
@@ -78,6 +79,38 @@ class UserController {
                         res.status(400).json({ 'message': 'password not changed' });
                     }
                 }
+            });
+        };
+        this.blockUser = (req, res) => {
+            block_1.default.collection.insertOne({
+                'blocker': req.body.blocker,
+                'blocked': req.body.blocked
+            }, (err, data) => {
+                if (err)
+                    console.log(err);
+                else {
+                    res.status(200).json({ 'message': 'user blocked' });
+                }
+            });
+        };
+        this.unblockUser = (req, res) => {
+            block_1.default.collection.deleteOne({
+                'blocker': req.body.blocker,
+                'blocked': req.body.blocked
+            }, (err, data) => {
+                if (err)
+                    console.log(err);
+                else {
+                    res.status(200).json({ 'message': 'user unblocked' });
+                }
+            });
+        };
+        this.getAllBlocks = (req, res) => {
+            block_1.default.find({}, (err, block) => {
+                if (err)
+                    console.log(err);
+                else
+                    res.json(block);
             });
         };
     }

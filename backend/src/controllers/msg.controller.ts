@@ -30,6 +30,7 @@ export class MsgController {
                     MsgThread.collection.insertOne(
                         {
                             'subject': req.body.subject,
+                            'realestate': req.body.realestate,
                             'user1': req.body.to,
                             'user2': req.body.from,
                             'active': true,
@@ -60,10 +61,23 @@ export class MsgController {
                     var mongo = require('mongodb');
                     var o_id = new mongo.ObjectID(req.body.thread);
 
-                    MsgThread.collection.updateOne({ "_id": o_id },
+                    MsgThread.collection.updateOne({ "_id": o_id, "user1": req.body.to },
                         {
                             $set: {
                                 'active': true,
+                                'read1': false,
+                                'timestamp': req.body.timestamp
+                            }
+                        }, (err, data) => {
+                            if (err) {
+                                console.log(err);
+                            }
+                        });
+                    MsgThread.collection.updateOne({ "_id": o_id, "user2": req.body.to },
+                        {
+                            $set: {
+                                'active': true,
+                                'read2': false,
                                 'timestamp': req.body.timestamp
                             }
                         }, (err, data) => {
@@ -101,7 +115,7 @@ export class MsgController {
                     }
                 }, (err, data) => {
                     if (err) console.log(err);
-                    else res.status(200).json({'message': 'user1 read message'});
+                    else res.status(200).json({ 'message': 'user1 read message' });
                 });
         } else {
             MsgThread.collection.updateOne({ "_id": o_id },
@@ -111,7 +125,7 @@ export class MsgController {
                     }
                 }, (err, data) => {
                     if (err) console.log(err);
-                    else res.status(200).json({'message': 'user2 read message'});
+                    else res.status(200).json({ 'message': 'user2 read message' });
                 });
         }
     }
@@ -119,15 +133,15 @@ export class MsgController {
     archiveThread = (req: express.Request, res: express.Response) => {
         var mongo = require('mongodb');
         var o_id = new mongo.ObjectID(req.body.thread);
-            MsgThread.collection.updateOne({ "_id": o_id },
-                {
-                    $set: {
-                        'active': req.body.active
-                    }
-                }, (err, data) => {
-                    if (err) console.log(err);
-                    else res.status(200).json({'message': 'user1 read message'});
-                });
-        
+        MsgThread.collection.updateOne({ "_id": o_id },
+            {
+                $set: {
+                    'active': req.body.active
+                }
+            }, (err, data) => {
+                if (err) console.log(err);
+                else res.status(200).json({ 'message': 'user1 read message' });
+            });
+
     }
 }

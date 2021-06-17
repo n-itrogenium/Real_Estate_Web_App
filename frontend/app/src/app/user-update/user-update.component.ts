@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
+import { MessagesService } from '../messages.service';
+import { Block } from '../models/block';
+import { MsgThread } from '../models/msgthread';
 import { User } from '../models/user';
 import { UserService } from '../user.service';
 
@@ -13,24 +16,29 @@ export class UserUpdateComponent implements OnInit {
 
   constructor(
     private userService: UserService,
+    private msgService: MessagesService,
     private notif: MatSnackBar,
     private router: Router) { }
 
   passwordRegex: RegExp;
   emailRegex: RegExp;
+  user: User;
+  blocks: Block[];
 
   ngOnInit(): void {
     this.user = JSON.parse(localStorage.getItem('loggedUser'));
     this.passwordRegex = new RegExp("^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[@$!%*#?&]).{8,24}$");
     this.emailRegex = new RegExp("^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$");
+
+    this.userService.getAllBlocksService().subscribe((data: Block[]) => {
+      this.blocks = data.filter(b => b.blocker == this.user.username);
+    })
   }
 
   logOut(): void { 
     localStorage.clear();
     this.router.navigate(['']);
   }
-
-  user: User;
 
   onFileSelected(event) {
     if (event.target.files && event.target.files[0]) {
@@ -121,6 +129,24 @@ export class UserUpdateComponent implements OnInit {
 
     this.logOut();
 
+  }
+
+  unblockUser(blocked): void {
+    this.userService.unblockUserService(this.user.username, blocked).subscribe(
+      response => {
+        this.msgService.getAllThreadsService(this.user.username).subscribe((data: MsgThread[]) => {
+          data = data.filter(t =>
+            (t.user1 == this.user.username && t.user2 == blocked) ||
+            (t.user2 == this.user.username && t.user1 == blocked));
+          for (let i: number = 0; i < data.length; i++)
+            this.msgService.archiveThreadService(data[i]._id, true).subscribe();
+        });
+        this.notif.open("Korisnik je uspešno odblokiran.", "OK");
+        setTimeout(() => { window.location.reload(); }, 1500);
+      },
+      error => {
+        this.notif.open("Korisnik nije uspešno odblokiran! Pokušajte ponovo.", "OK");
+      });
   }
 
 }

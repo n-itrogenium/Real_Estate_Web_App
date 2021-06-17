@@ -22,4 +22,16 @@ userRouter.route('/changePassword').post(
     (req, res) => new UserController().changePassword(req, res)
 )
 
+userRouter.route('/blockUser').post(
+    (req, res) => new UserController().blockUser(req, res)
+)
+
+userRouter.route('/unblockUser').post(
+    (req, res) => new UserController().unblockUser(req, res)
+)
+
+userRouter.route('/getAllBlocks').get(
+    (req, res) => new UserController().getAllBlocks(req, res)
+)
+
 export default userRouter;

@@ -1,5 +1,6 @@
 import express from 'express';
 import User from '../models/user';
+import Block from '../models/block';
 
 export class UserController{
     login = (req: express.Request, res: express.Response)=>{
@@ -81,4 +82,40 @@ export class UserController{
             }
         })
     }
+
+    blockUser = (req: express.Request, res: express.Response) => {
+        Block.collection.insertOne(
+            {
+                'blocker': req.body.blocker,
+                'blocked': req.body.blocked
+            }, (err, data) => {
+                if (err) console.log(err);
+                else {
+                    res.status(200).json({ 'message': 'user blocked' });
+                }
+            });
+
+    }
+
+    unblockUser = (req: express.Request, res: express.Response) => {
+        Block.collection.deleteOne(
+            {
+                'blocker': req.body.blocker,
+                'blocked': req.body.blocked
+            }, (err, data) => {
+                if (err) console.log(err);
+                else {
+                    res.status(200).json({ 'message': 'user unblocked' });
+                }
+            });
+
+    }
+
+    getAllBlocks = (req: express.Request, res: express.Response) => {
+        Block.find({}, (err, block) => {
+            if (err) console.log(err);
+            else res.json(block);
+        })
+    }
+    
 }

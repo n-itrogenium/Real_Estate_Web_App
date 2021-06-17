@@ -63,5 +63,27 @@ export class UserService {
 
     return this.http.post(`${this.uri}/users/changePassword`, data)
   }
+
+  blockUserService(blocker, blocked) {
+    const data = {
+      blocker: blocker,
+      blocked: blocked
+    }
+
+    return this.http.post(`${this.uri}/users/blockUser`, data)
+  }
+
+  unblockUserService(blocker, blocked) {
+    const data = {
+      blocker: blocker,
+      blocked: blocked
+    }
+
+    return this.http.post(`${this.uri}/users/unblockUser`, data)
+  }
+
+  getAllBlocksService() {
+    return this.http.get(`${this.uri}/users/getAllBlocks`);
+  }
   
 }

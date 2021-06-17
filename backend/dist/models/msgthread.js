@@ -13,6 +13,9 @@ let MsgThread = new Schema({
         type: String,
         required: true
     },
+    realestate: {
+        type: String
+    },
     user1: {
         type: String,
         required: true

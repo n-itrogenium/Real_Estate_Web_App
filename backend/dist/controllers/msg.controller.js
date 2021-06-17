@@ -35,6 +35,7 @@ class MsgController {
                     if (req.body.thread == null) {
                         msgthread_1.default.collection.insertOne({
                             'subject': req.body.subject,
+                            'realestate': req.body.realestate,
                             'user1': req.body.to,
                             'user2': req.body.from,
                             'active': true,
@@ -65,9 +66,21 @@ class MsgController {
                     else {
                         var mongo = require('mongodb');
                         var o_id = new mongo.ObjectID(req.body.thread);
-                        msgthread_1.default.collection.updateOne({ "_id": o_id }, {
+                        msgthread_1.default.collection.updateOne({ "_id": o_id, "user1": req.body.to }, {
                             $set: {
                                 'active': true,
+                                'read1': false,
+                                'timestamp': req.body.timestamp
+                            }
+                        }, (err, data) => {
+                            if (err) {
+                                console.log(err);
+                            }
+                        });
+                        msgthread_1.default.collection.updateOne({ "_id": o_id, "user2": req.body.to }, {
+                            $set: {
+                                'active': true,
+                                'read2': false,
                                 'timestamp': req.body.timestamp
                             }
                         }, (err, data) => {

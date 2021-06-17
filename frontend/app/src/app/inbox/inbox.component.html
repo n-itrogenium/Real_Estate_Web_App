@@ -20,14 +20,12 @@
 
             <tr>
                 <td *ngIf='t.user1 != user.username'>
-                    {{t.user1}}
-                    <br>
+                    <p *ngIf='t.realestate == null'>{{t.user1}}<br></p>
                     <p *ngIf='!t.read2' style='color: red'>NEPROČITANO</p>
                 </td>
 
                 <td *ngIf='t.user2 != user.username'>
-                    {{t.user2}}
-                    <br>
+                    <p *ngIf='t.realestate == null'>{{t.user2}}<br></p>
                     <p *ngIf='!t.read1' style='color: red'>NEPROČITANO</p>
                 </td>
             </tr>
@@ -36,11 +34,11 @@
                 <td>{{t.timestamp | date: 'dd. MM. yyyy. u HH.mm' }}</td>
             </tr>
 
-            <tr>
+            <!--<tr>
                 <td>
                     <button (click)='archiveThread(t)'>Arhiviraj konverzaciju</button>
                 </td>
-            </tr>
+            </tr>-->
 
         </ng-container>
 
@@ -65,14 +63,12 @@
 
             <tr>
                 <td *ngIf='t.user1 != user.username'>
-                    {{t.user1}}
-                    <br>
+                    <p *ngIf='t.realestate == null'>{{t.user1}}<br></p>
                     <p *ngIf='!t.read2' style='color: red'>NEPROČITANO</p>
                 </td>
 
                 <td *ngIf='t.user2 != user.username'>
-                    {{t.user2}}
-                    <br>
+                    <p *ngIf='t.realestate == null'>{{t.user2}}<br></p>
                     <p *ngIf='!t.read1' style='color: red'>NEPROČITANO</p>
                 </td>
             </tr>
@@ -81,11 +77,11 @@
                 <td>{{t.timestamp | date: 'dd. MM. yyyy. u HH.mm' }}</td>
             </tr>
 
-            <tr>
+            <!--<tr>
                 <td>
                     <button (click)='archiveThread(t)'>Vrati iz arhive</button>
                 </td>
-            </tr>
+            </tr>-->
 
         </ng-container>
 

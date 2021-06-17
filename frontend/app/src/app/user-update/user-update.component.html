@@ -83,3 +83,18 @@
     </tr>
 
 </form>
+
+
+<!--------------------------------BLOKIRANI KORISNICI-------------------------------->
+
+<div *ngIf='blocks != null'>
+    <h1>Blokirani korisnici</h1>
+    <table>
+        <tr *ngFor='let b of blocks'>
+            <td>{{b.blocked}}</td>
+            <td>
+                <button (click)='unblockUser(b.blocked)'>Odblokiraj</button>
+            </td>
+        </tr>
+    </table>
+</div>

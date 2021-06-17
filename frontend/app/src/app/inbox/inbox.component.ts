@@ -3,7 +3,9 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { MessagesService } from '../messages.service';
 import { MsgThread } from '../models/msgthread';
+import { RealEstate } from '../models/real-estate';
 import { User } from '../models/user';
+import { RealEstateService } from '../real-estate.service';
 
 @Component({
   selector: 'app-inbox',
@@ -13,8 +15,8 @@ import { User } from '../models/user';
 export class InboxComponent implements OnInit {
 
   constructor(
-    private router: Router,
     private msgService: MessagesService,
+    private realEstateService: RealEstateService,
     private notif: MatSnackBar) { }
 
   currentTab: string;
@@ -23,9 +25,21 @@ export class InboxComponent implements OnInit {
 
   ngOnInit(): void {
     this.user = JSON.parse(localStorage.getItem('loggedUser'));
+    localStorage.removeItem('viewRealEstate');
     this.currentTab = "active";
+
+    this.realEstateService.getAllRealEstateService().subscribe((data: RealEstate[]) => {
+      data = data.filter(re => re.owner == this.user.username);
+      let myRealEstate = new Array<string>();
+      for (let i: number = 0; i < data.length; i++) 
+        myRealEstate.push(data[i]._id);
+      localStorage.setItem('myRealEstate', JSON.stringify(myRealEstate));
+    });
+
     this.msgService.getAllThreadsService(this.user.username).subscribe((data: MsgThread[]) => {
-      this.threads = data;
+      this.threads = data.sort((a, b) => {
+        return new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+      });
     });
   }
 

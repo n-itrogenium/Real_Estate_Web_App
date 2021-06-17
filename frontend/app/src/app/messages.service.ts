@@ -24,10 +24,11 @@ export class MessagesService {
     return this.http.post(`${this.uri}/msg/getAllMessages`, data);
   }
 
-  sendMessageService(thread, subject, to, from, timestamp, content) {
+  sendMessageService(thread, subject, realestate, to, from, timestamp, content) {
     const data = {
       thread: thread,
       subject: subject,
+      realestate: realestate,
       to: to,
       from: from,
       timestamp: timestamp,

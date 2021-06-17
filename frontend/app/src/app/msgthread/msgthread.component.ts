@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MessagesService } from '../messages.service';
+import { Block } from '../models/block';
 import { Message } from '../models/message';
 import { MsgThread } from '../models/msgthread';
+import { UserService } from '../user.service';
 
 @Component({
   selector: 'app-msgthread',
@@ -13,18 +15,24 @@ export class MsgthreadComponent implements OnInit {
 
   constructor(
     private msgService: MessagesService,
+    private userService: UserService,
     private notif: MatSnackBar) { }
 
   thread: MsgThread;
   loggedUser: string;
   otherUser: string;
+  owner: boolean;
   messages: Message[];
   content: string;
+  block: Block;
 
   ngOnInit(): void {
     this.thread = JSON.parse(localStorage.getItem('currentThread'));
     this.loggedUser = JSON.parse(localStorage.getItem('loggedUser')).username;
-    
+    let myRealEstate: Array<string> = JSON.parse(localStorage.getItem('myRealEstate'));
+    this.owner = myRealEstate.includes(this.thread.realestate);
+    this.block = null;
+
     if (this.thread.user1 == this.loggedUser) {
       this.msgService.readMessageService(this.thread._id, true, false).subscribe();
       this.otherUser = this.thread.user2;
@@ -33,25 +41,39 @@ export class MsgthreadComponent implements OnInit {
       this.otherUser = this.thread.user1;
     }
 
-    this.msgService.getAllMessagesService(this.thread._id).subscribe((data:Message[]) => {
+    this.msgService.getAllMessagesService(this.thread._id).subscribe((data: Message[]) => {
       this.messages = data;
     });
+
+    this.userService.getAllBlocksService().subscribe((data: Block[]) => {
+      if (data.find(b => b.blocker == this.loggedUser && b.blocked == this.otherUser)) {
+        this.block = new Block();
+        this.block.blocker = this.loggedUser;
+        this.block.blocked = this.otherUser;
+      }
+      if (data.find(b => b.blocker == this.otherUser && b.blocked == this.loggedUser)) {
+        this.block = new Block();
+        this.block.blocker = this.otherUser;
+        this.block.blocked = this.loggedUser;
+      }
+    })
   }
 
   send(): void {
-      this.msgService.sendMessageService(
-        this.thread._id,
-        this.thread.subject,
-        this.otherUser,
-        this.loggedUser, 
-        new Date(),
-        this.content).subscribe(response => {
-          this.notif.open("Poruka je uspešno poslata.", "OK");
-          setTimeout(() => { window.location.reload(); }, 1500);
+    this.msgService.sendMessageService(
+      this.thread._id,
+      this.thread.subject,
+      null,
+      this.otherUser,
+      this.loggedUser,
+      new Date(),
+      this.content).subscribe(response => {
+        this.notif.open("Poruka je uspešno poslata.", "OK");
+        setTimeout(() => { window.location.reload(); }, 1500);
       },
-      error => {
-        this.notif.open("Poruka nije poslata! Pokušajte ponovo.", "OK");
-      });
+        error => {
+          this.notif.open("Poruka nije poslata! Pokušajte ponovo.", "OK");
+        });
   }
 
   archiveThread(): void {
@@ -77,6 +99,46 @@ export class MsgthreadComponent implements OnInit {
         error => {
           this.notif.open("Poruka nije vraćena iz arhive! Pokušajte ponovo.", "OK");
         });
+  }
+
+  blockUser(): void {
+    this.userService.blockUserService(this.loggedUser, this.otherUser).subscribe(
+      response => {
+        this.msgService.getAllThreadsService(this.loggedUser).subscribe((data: MsgThread[]) => {
+          data = data.filter(t =>
+            (t.user1 == this.loggedUser && t.user2 == this.otherUser) ||
+            (t.user2 == this.loggedUser && t.user1 == this.otherUser));
+          for (let i: number = 0; i < data.length; i++)
+            this.msgService.archiveThreadService(data[i]._id, false).subscribe();
+          this.thread.active = false;
+          localStorage.setItem('currentThread', JSON.stringify(this.thread));
+        });
+        this.notif.open("Korisnik je uspešno blokiran.", "OK");
+        setTimeout(() => { window.location.reload(); }, 1500);
+      },
+      error => {
+        this.notif.open("Korisnik nije uspešno blokiran! Pokušajte ponovo.", "OK");
+      });
+  }
+
+  unblockUser(): void {
+    this.userService.unblockUserService(this.loggedUser, this.otherUser).subscribe(
+      response => {
+        this.msgService.getAllThreadsService(this.loggedUser).subscribe((data: MsgThread[]) => {
+          data = data.filter(t =>
+            (t.user1 == this.loggedUser && t.user2 == this.otherUser) ||
+            (t.user2 == this.loggedUser && t.user1 == this.otherUser));
+          for (let i: number = 0; i < data.length; i++)
+            this.msgService.archiveThreadService(data[i]._id, true).subscribe();
+          this.thread.active = true;
+          localStorage.setItem('currentThread', JSON.stringify(this.thread));
+        });
+        this.notif.open("Korisnik je uspešno odblokiran.", "OK");
+        setTimeout(() => { window.location.reload(); }, 1500);
+      },
+      error => {
+        this.notif.open("Korisnik nije uspešno odblokiran! Pokušajte ponovo.", "OK");
+      });
   }
 
 }
