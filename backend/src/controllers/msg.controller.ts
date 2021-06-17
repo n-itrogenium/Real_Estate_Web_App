@@ -21,7 +21,7 @@ export class MsgController {
 
     sendMessage = (req: express.Request, res: express.Response) => {
         User.collection.findOne({ 'username': req.body.to }, (err, user) => {
-            if (err || user == null) {
+            if ((err || user == null) && req.body.to != 'Agencija') {
                 console.log(err);
                 res.status(400).json({ 'message': 'user not found' });
             }

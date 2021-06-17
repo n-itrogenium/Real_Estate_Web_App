@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
 import { RealEstate } from '../models/real-estate';
 import { RealEstateService } from '../real-estate.service';
 
@@ -12,7 +13,8 @@ export class AgentManageReComponent implements OnInit {
 
   constructor(
     private realEstateService: RealEstateService,
-    private notif: MatSnackBar) { }
+    private notif: MatSnackBar,
+    private router: Router) { }
 
   real_estate: RealEstate[];
 
@@ -60,6 +62,11 @@ export class AgentManageReComponent implements OnInit {
     error => {
       this.notif.open("Nekretnina nije uklonjena iz promovisanih! Pokušajte ponovo.", "OK");
     })
+  }
+
+  openPage(selectedRealEstate): void {
+    localStorage.setItem('viewRealEstate', JSON.stringify(selectedRealEstate));
+    this.router.navigate(['/realestate']);
   }
 
 }

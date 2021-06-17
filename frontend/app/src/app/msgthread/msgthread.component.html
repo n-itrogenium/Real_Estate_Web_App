@@ -6,13 +6,23 @@
 
 <table *ngFor='let m of messages'>
     <ng-container *ngIf='thread.realestate != null'>
-        <tr *ngIf='m.from != loggedUser'>
-            <td *ngIf='owner'>Kupac {{m.from}}</td>
+
+        <tr *ngIf='m.from != loggedUser.username && loggedUser.type == 1'>
+            <td *ngIf='owner && otherUser != "Agencija"'>{{m.from}}</td>
+            <td *ngIf='owner && otherUser == "Agencija"'>Agencija</td>
             <td *ngIf='!owner'>Vlasnik nekretnine</td>
         </tr>
 
-        <tr *ngIf='m.from == loggedUser'>
+        <tr *ngIf='m.from != loggedUser.username && loggedUser.type == 2'>
+            <td *ngIf='owner && (m.from == thread.user1 || m.from == thread.user2)'>{{m.from}}</td>
+            <td *ngIf='!owner && (m.from == thread.user1 || m.from == thread.user2) && m.from != "Agencija"'>Vlasnik nekretnine</td>
+            <td *ngIf='!owner && m.from == "Agencija"'>Agencija</td>
+            <td *ngIf='m.from != thread.user1 && m.from != thread.user2'>{{m.from}} [Agencija]</td>
+        </tr>
+
+        <tr *ngIf='m.from == loggedUser.username'>
             <td>Ja</td>
+            <td *ngIf='loggedUser.type == 2'>[Agencija]</td>
         </tr>
     </ng-container>
 
@@ -44,13 +54,13 @@
         </td>
     </tr>
 
-    <button (click)='blockUser()'>Blokiraj korisnika</button>
+    <button (click)='blockUser()' *ngIf='loggedUser.type == 1 && otherUser != "Agencija"'>Blokiraj korisnika</button>
 </form>
 
-<div *ngIf='block != null && block.blocker == loggedUser'>
+<div *ngIf='block != null && block.blocker == loggedUser.username'>
     <p>Nije moguće nastaviti konverzaciju zato što ste blokirali korisnika.</p>
     <button (click)='unblockUser()'>Odblokiraj korisnika</button>
 </div>
 
-<p *ngIf='block != null && block.blocked == loggedUser'>Nije moguće nastaviti konverzaciju zato što vas je korisnik
+<p *ngIf='block != null && block.blocked == loggedUser.username'>Nije moguće nastaviti konverzaciju zato što Vas je korisnik
     blokirao.</p>

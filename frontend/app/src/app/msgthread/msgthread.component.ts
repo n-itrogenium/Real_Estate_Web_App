@@ -4,6 +4,7 @@ import { MessagesService } from '../messages.service';
 import { Block } from '../models/block';
 import { Message } from '../models/message';
 import { MsgThread } from '../models/msgthread';
+import { User } from '../models/user';
 import { UserService } from '../user.service';
 
 @Component({
@@ -19,7 +20,7 @@ export class MsgthreadComponent implements OnInit {
     private notif: MatSnackBar) { }
 
   thread: MsgThread;
-  loggedUser: string;
+  loggedUser: User;
   otherUser: string;
   owner: boolean;
   messages: Message[];
@@ -28,12 +29,13 @@ export class MsgthreadComponent implements OnInit {
 
   ngOnInit(): void {
     this.thread = JSON.parse(localStorage.getItem('currentThread'));
-    this.loggedUser = JSON.parse(localStorage.getItem('loggedUser')).username;
+    this.loggedUser = JSON.parse(localStorage.getItem('loggedUser'));
     let myRealEstate: Array<string> = JSON.parse(localStorage.getItem('myRealEstate'));
     this.owner = myRealEstate.includes(this.thread.realestate);
     this.block = null;
 
-    if (this.thread.user1 == this.loggedUser) {
+    if (this.thread.user1 == this.loggedUser.username ||
+        this.thread.user1 == 'Agencija' && this.loggedUser.type == 2) {
       this.msgService.readMessageService(this.thread._id, true, false).subscribe();
       this.otherUser = this.thread.user2;
     } else {
@@ -46,15 +48,15 @@ export class MsgthreadComponent implements OnInit {
     });
 
     this.userService.getAllBlocksService().subscribe((data: Block[]) => {
-      if (data.find(b => b.blocker == this.loggedUser && b.blocked == this.otherUser)) {
+      if (data.find(b => b.blocker == this.loggedUser.username && b.blocked == this.otherUser)) {
         this.block = new Block();
-        this.block.blocker = this.loggedUser;
+        this.block.blocker = this.loggedUser.username;
         this.block.blocked = this.otherUser;
       }
-      if (data.find(b => b.blocker == this.otherUser && b.blocked == this.loggedUser)) {
+      if (data.find(b => b.blocker == this.otherUser && b.blocked == this.loggedUser.username)) {
         this.block = new Block();
         this.block.blocker = this.otherUser;
-        this.block.blocked = this.loggedUser;
+        this.block.blocked = this.loggedUser.username;
       }
     })
   }
@@ -65,7 +67,7 @@ export class MsgthreadComponent implements OnInit {
       this.thread.subject,
       null,
       this.otherUser,
-      this.loggedUser,
+      this.loggedUser.username,
       new Date(),
       this.content).subscribe(response => {
         this.notif.open("Poruka je uspešno poslata.", "OK");
@@ -102,12 +104,12 @@ export class MsgthreadComponent implements OnInit {
   }
 
   blockUser(): void {
-    this.userService.blockUserService(this.loggedUser, this.otherUser).subscribe(
+    this.userService.blockUserService(this.loggedUser.username, this.otherUser).subscribe(
       response => {
-        this.msgService.getAllThreadsService(this.loggedUser).subscribe((data: MsgThread[]) => {
+        this.msgService.getAllThreadsService(this.loggedUser.username).subscribe((data: MsgThread[]) => {
           data = data.filter(t =>
-            (t.user1 == this.loggedUser && t.user2 == this.otherUser) ||
-            (t.user2 == this.loggedUser && t.user1 == this.otherUser));
+            (t.user1 == this.loggedUser.username && t.user2 == this.otherUser) ||
+            (t.user2 == this.loggedUser.username && t.user1 == this.otherUser));
           for (let i: number = 0; i < data.length; i++)
             this.msgService.archiveThreadService(data[i]._id, false).subscribe();
           this.thread.active = false;
@@ -122,12 +124,12 @@ export class MsgthreadComponent implements OnInit {
   }
 
   unblockUser(): void {
-    this.userService.unblockUserService(this.loggedUser, this.otherUser).subscribe(
+    this.userService.unblockUserService(this.loggedUser.username, this.otherUser).subscribe(
       response => {
-        this.msgService.getAllThreadsService(this.loggedUser).subscribe((data: MsgThread[]) => {
+        this.msgService.getAllThreadsService(this.loggedUser.username).subscribe((data: MsgThread[]) => {
           data = data.filter(t =>
-            (t.user1 == this.loggedUser && t.user2 == this.otherUser) ||
-            (t.user2 == this.loggedUser && t.user1 == this.otherUser));
+            (t.user1 == this.loggedUser.username && t.user2 == this.otherUser) ||
+            (t.user2 == this.loggedUser.username && t.user1 == this.otherUser));
           for (let i: number = 0; i < data.length; i++)
             this.msgService.archiveThreadService(data[i]._id, true).subscribe();
           this.thread.active = true;

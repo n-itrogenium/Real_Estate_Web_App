@@ -66,6 +66,7 @@
             <tr>
                 <td><button (click)='approveRealEstate(re)'>Odobri</button></td>
                 <td><button (click)='deleteRealEstate(re)'>Odbaci</button></td>
+                <td><button (click)='openPage(re)'>Pregledaj nekretninu</button></td>
             </tr>
 
             
@@ -140,6 +141,7 @@
             <tr>
                 <td *ngIf='!re.promo'><button (click)='promoteRealEstate(re)'>Promoviši</button></td>
                 <td *ngIf='re.promo'><button (click)='removeFromPromoted(re)'>Ukloni iz promovisanih</button></td>
+                <td><button (click)='openPage(re)'>Pregledaj nekretninu</button></td>
             </tr>
 
             

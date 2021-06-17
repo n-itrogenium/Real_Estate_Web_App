@@ -12,15 +12,23 @@
         <td><input type='text' name='subject' [(ngModel)]='subject'></td>
     </tr>
 
-    <tr>
+    <tr *ngIf='block == null'>
         <td>Poruka:</td>
         <td><textarea name='content' [(ngModel)]='content'></textarea></td>
     </tr>
 
-    <tr>
+    <tr *ngIf='block == null'>
         <td colspan='2'>
             <button (click)='send()'>Pošalji</button>
         </td>
     </tr>
 
 </form>
+
+<div *ngIf='block != null && block.blocker == user.username'>
+    <p>Nije moguće kontaktirati vlasnika zato što ste blokirali korisnika.</p>
+    <button (click)='unblockUser()'>Odblokiraj korisnika</button>
+</div>
+
+<p *ngIf='block != null && block.blocked == user.username'>Nije moguće kontaktirati vlasnika zato što Vas je korisnik
+    blokirao.</p>

@@ -27,20 +27,34 @@ export class InboxComponent implements OnInit {
     this.user = JSON.parse(localStorage.getItem('loggedUser'));
     localStorage.removeItem('viewRealEstate');
     this.currentTab = "active";
+    this.threads = null;
 
     this.realEstateService.getAllRealEstateService().subscribe((data: RealEstate[]) => {
-      data = data.filter(re => re.owner == this.user.username);
+      if (this.user.type == 1)
+        data = data.filter(re => re.owner == this.user.username);
+      else 
+        data = data.filter(re => re.owner == "Agencija");
+
       let myRealEstate = new Array<string>();
       for (let i: number = 0; i < data.length; i++) 
         myRealEstate.push(data[i]._id);
       localStorage.setItem('myRealEstate', JSON.stringify(myRealEstate));
     });
 
+    if (this.user.type == 1)
     this.msgService.getAllThreadsService(this.user.username).subscribe((data: MsgThread[]) => {
       this.threads = data.sort((a, b) => {
         return new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
       });
     });
+
+    if (this.user.type == 2)
+      this.msgService.getAllThreadsService('Agencija').subscribe((data: MsgThread[]) => {
+        this.threads = data.sort((a, b) => {
+          return new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+        });
+      });
+      
   }
 
   changeTab(tab): void {

@@ -55,10 +55,13 @@
     <tr>
         <td>Vlasnik:</td>
         <td>{{real_estate.owner}}</td>
-        <td *ngIf='real_estate.owner != user.username'><button routerLink='/composeMessage'>Kontaktiraj vlasnika</button></td>
+        <td *ngIf='(real_estate.owner != user.username && user.type == 1) ||
+            (user.type == 2 && real_estate.owner != "Agencija")'>
+                <button routerLink='/composeMessage'>Kontaktiraj vlasnika</button>
+        </td>
     </tr>
 
-    <tr *ngIf='real_estate.owner == user.username'>
+    <tr *ngIf='real_estate.owner == user.username || real_estate.owner == "Agencija" && user.type == 2'>
         <td><button routerLink='/user/updateRealEstate'>Uredi nekretninu</button></td>
     </tr>
 
