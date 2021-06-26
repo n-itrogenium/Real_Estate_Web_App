@@ -16,4 +16,5 @@ export class RealEstate {
     owner: string; // vlasnik (korisnik ili agencija)
     promo: boolean; // prikaz među promovisanim nekretninama
     approved: boolean; // odobrena od strane agenta
+    sold: boolean; // da li je prodata, ako je na prodaju
 }

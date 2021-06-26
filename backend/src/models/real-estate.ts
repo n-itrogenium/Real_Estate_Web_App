@@ -70,6 +70,11 @@ let RealEstate = new Schema(
             type: Boolean,
             required: true,
             default: false
+        },
+        sold: {
+            type: Boolean,
+            required: true,
+            default: false
         }
     }
 );

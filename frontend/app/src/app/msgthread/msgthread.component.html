@@ -1,3 +1,5 @@
+<!-----------------------------KONVERZACIJA----------------------------->
+
 <h1>Konverzacija: {{thread.subject}}</h1>
 <div *ngIf='block == null'>
     <button *ngIf='thread.active' (click)='archiveThread()'>Arhiviraj konverzaciju</button>
@@ -15,7 +17,8 @@
 
         <tr *ngIf='m.from != loggedUser.username && loggedUser.type == 2'>
             <td *ngIf='owner && (m.from == thread.user1 || m.from == thread.user2)'>{{m.from}}</td>
-            <td *ngIf='!owner && (m.from == thread.user1 || m.from == thread.user2) && m.from != "Agencija"'>Vlasnik nekretnine</td>
+            <td *ngIf='!owner && (m.from == thread.user1 || m.from == thread.user2) && m.from != "Agencija"'>Vlasnik
+                nekretnine</td>
             <td *ngIf='!owner && m.from == "Agencija"'>Agencija</td>
             <td *ngIf='m.from != thread.user1 && m.from != thread.user2'>{{m.from}} [Agencija]</td>
         </tr>
@@ -62,5 +65,50 @@
     <button (click)='unblockUser()'>Odblokiraj korisnika</button>
 </div>
 
-<p *ngIf='block != null && block.blocked == loggedUser.username'>Nije moguće nastaviti konverzaciju zato što Vas je korisnik
+<p *ngIf='block != null && block.blocked == loggedUser.username'>Nije moguće nastaviti konverzaciju zato što Vas je
+    korisnik
     blokirao.</p>
+
+
+<!-----------------------------PONUDE ZA PLAĆANJE----------------------------->
+
+<div *ngIf='thread.realestate != null && realestate.sale == 1'>
+
+    <form *ngIf='!owner && loggedUser.type == 1'>
+        <h1>Daj ponudu</h1>
+        <div *ngIf='offerMade'>
+            <p *ngIf='offer.accepted == null'>STATUS: U OBRADI</p>
+            <p *ngIf='offer.accepted == true'>STATUS: PRIHVAĆENO</p>
+            <p *ngIf='offer.accepted == false'>STATUS: ODBIJENO</p>
+        </div>
+        <div *ngIf='!offerMade'>
+            <tr>
+                <td>Iznos: </td>
+                <td><input type='number' name='amount' [(ngModel)]='amount'>€</td>
+            </tr>
+            <tr>
+                <td><button (click)='makeOffer()'>Daj ponudu</button></td>
+            </tr>
+        </div>
+    </form>
+
+    <form *ngIf='owner && offerMade'>
+        <h1>Odgovori na ponudu</h1>
+        <tr>
+            <td>Ponuda: </td>
+            <td>{{offer.amount}} €</td>
+        </tr>
+        <tr *ngIf='offer.accepted == null'>
+            <td><button (click)='acceptOffer()'>Prihvati</button></td>
+            <td><button (click)='declineOffer()'>Odbij</button></td>
+        </tr>
+        <tr *ngIf='offer.accepted == true'>
+            <td>STATUS: PRIHVAĆENO</td>
+        </tr>
+        <tr *ngIf='offer.accepted == false'>
+            <td>STATUS: ODBIJENO</td>
+        </tr>
+    </form>
+
+
+</div>

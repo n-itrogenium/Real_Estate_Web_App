@@ -2,11 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { AdminService } from '../admin.service';
-import { UserService } from '../user.service';
-import {MatSidenavModule} from '@angular/material/sidenav';
 import { Chart } from 'chart.js';
 import { RealEstateService } from '../real-estate.service';
 import { RealEstate } from '../models/real-estate';
+import { Percentage } from '../models/percentage';
 
 @Component({
   selector: 'app-admin',
@@ -17,7 +16,12 @@ export class AdminComponent implements OnInit {
 
   constructor(
     private realEstateService: RealEstateService,
+    private adminService: AdminService,
+    private notif: MatSnackBar,
     private router: Router) { }
+
+  sale: number;
+  rent: number;
 
   ngOnInit(): void {
     this.realEstateService.getAllRealEstateService().subscribe((data: RealEstate[]) => {
@@ -28,11 +32,37 @@ export class AdminComponent implements OnInit {
       this.showApartmentChart(data.filter(re => re.type == 1));
       this.showHouseChart(data.filter(re => re.type == 0));
     });
+    this.adminService.getPercentageService().subscribe((data: Percentage) => {
+      if (data) {
+        this.sale = data.sale;
+        this.rent = data.rent;
+      }
+    });
   }
 
-  logOut(): void { 
+  logOut(): void {
     localStorage.clear();
     this.router.navigate(['']);
+  }
+
+  setSalePercentage(): void {
+    this.adminService.setSalePercentageService(this.sale).subscribe(response => {
+      this.notif.open("Procenat za prodaju je uspešno ažuriran.", "OK");
+      setTimeout(() => { window.location.reload(); }, 1500);
+    },
+      error => {
+        this.notif.open("Procenat nije uspešno ažuriran! Pokušajte ponovo.", "OK");
+      })
+  }
+
+  setRentPercentage(): void {
+    this.adminService.setRentPercentageService(this.rent).subscribe(response => {
+      this.notif.open("Procenat za iznajmljivanje je uspešno ažuriran.", "OK");
+      setTimeout(() => { window.location.reload(); }, 1500);
+    },
+      error => {
+        this.notif.open("Procenat nije uspešno ažuriran! Pokušajte ponovo.", "OK");
+      })
   }
 
   rentPriceChart: Chart;
@@ -168,6 +198,6 @@ export class AdminComponent implements OnInit {
       }
     });
   }
-  
+
 
 }

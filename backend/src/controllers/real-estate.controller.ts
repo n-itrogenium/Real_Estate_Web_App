@@ -1,4 +1,6 @@
 import express from 'express'
+import Rent from '../models/rent';
+import Contract from '../models/contract';
 import RealEstate from '../models/real-estate'
 
 export class RealEstateController {
@@ -77,7 +79,7 @@ export class RealEstateController {
         var mongo = require('mongodb');
         var o_id = new mongo.ObjectID(req.body._id);
 
-        RealEstate.collection.updateOne({ "_id": o_id }, { $set : { 'approved' : true } }, (err, data) => {
+        RealEstate.collection.updateOne({ "_id": o_id }, { $set: { 'approved': true } }, (err, data) => {
             if (err) {
                 console.log(err);
                 res.status(400).json({ 'message': 'real estate not approved' });
@@ -91,7 +93,7 @@ export class RealEstateController {
         var mongo = require('mongodb');
         var o_id = new mongo.ObjectID(req.body._id);
 
-        RealEstate.collection.updateOne({ "_id": o_id }, { $set : { 'promo' : true } }, (err, data) => {
+        RealEstate.collection.updateOne({ "_id": o_id }, { $set: { 'promo': true } }, (err, data) => {
             if (err) {
                 console.log(err);
                 res.status(400).json({ 'message': 'real estate not promoted' });
@@ -105,7 +107,7 @@ export class RealEstateController {
         var mongo = require('mongodb');
         var o_id = new mongo.ObjectID(req.body._id);
 
-        RealEstate.collection.updateOne({ "_id": o_id }, { $set : { 'promo' : false } }, (err, data) => {
+        RealEstate.collection.updateOne({ "_id": o_id }, { $set: { 'promo': false } }, (err, data) => {
             if (err) {
                 console.log(err);
                 res.status(400).json({ 'message': 'real estate not removed from promoted' });
@@ -115,5 +117,35 @@ export class RealEstateController {
         });
     }
 
+    sellRealEstate = (req: express.Request, res: express.Response) => {
+        Contract.collection.insertOne(req.body, (err, data) => {
+            if (err) {
+                console.log(err);
+            } else {
+                if (req.body.sale == 1) {
+                    var mongo = require('mongodb');
+                    var o_id = new mongo.ObjectID(req.body.realestate);
+                    RealEstate.collection.updateOne({ "_id": o_id }, { $set: { 'sold': true } }, (err, data) => {
+                        if (err) console.log(err);
+                    })
+                }
+                res.status(200).json({ 'message': 'contract added' });
+            }
+        });
+    }
+
+    getRents = (req: express.Request, res: express.Response) => {
+        Rent.find({}, (err, rents) => {
+            if (err) console.log(err);
+            else res.json(rents);
+        })
+    }
+
+    reserve = (req: express.Request, res: express.Response) => {
+        Rent.collection.insertOne(req.body, (err, data) => {
+            if (err) console.log(err);
+            else res.status(200).json({'message': 'reserved'});
+        })
+    }
 
 }

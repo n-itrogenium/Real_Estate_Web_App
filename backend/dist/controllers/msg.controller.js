@@ -17,14 +17,6 @@ class MsgController {
                     res.json(thread);
             });
         };
-        this.getAllAgentThreads = (req, res) => {
-            msgthread_1.default.find({ 'user1': 'Agencija' }, (err, thread) => {
-                if (err)
-                    console.log(err);
-                else
-                    res.json(thread);
-            });
-        };
         this.getAllMessages = (req, res) => {
             message_1.default.find({ 'thread': req.body.thread_id }, (err, messages) => {
                 if (err)

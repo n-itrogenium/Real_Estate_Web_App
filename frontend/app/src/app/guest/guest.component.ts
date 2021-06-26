@@ -16,7 +16,7 @@ export class GuestComponent implements OnInit {
 
   ngOnInit(): void {
     this.realEstateService.getAllRealEstateService().subscribe((data:RealEstate[]) => {
-      this.real_estate = data.filter(re => re.approved == true);
+      this.real_estate = data.filter(re => re.approved == true && re.sold == false);
       //this.result_real_estate = data;
       for ( let i: number = 0; i < data.length; i++) {
         if (this.real_estate[i].gallery != null) {

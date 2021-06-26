@@ -33,7 +33,8 @@ export class RealEstateService {
       price: new_re.price,
       owner: new_re.owner,
       promo: new_re.promo,
-      approved: new_re.approved
+      approved: new_re.approved,
+      sold: false
     }
 
     return this.http.post(`${this.uri}/realestate/addRealEstate`, data);
@@ -78,5 +79,30 @@ export class RealEstateService {
   removeFromPromotedService(_id) {
     const data = { _id: _id }
     return this.http.post(`${this.uri}/realestate/removeFromPromoted`, data)
+  }
+
+  sellRealEstateService(realestate, sale, owner, client, price) {
+    const data = { 
+      realestate: realestate,
+      sale: sale,
+      owner: owner,
+      client: client,
+      price: price
+    }
+    return this.http.post(`${this.uri}/realestate/sellRealEstate`, data)
+  }
+
+  getRentsService() {
+    return this.http.get(`${this.uri}/realestate/getRents`);
+  }
+
+  reserveService(realestate, client, startdate, enddate) {
+    const data = {
+      realestate: realestate,
+      client: client,
+      startdate: startdate,
+      enddate: enddate
+    }
+    return this.http.post(`${this.uri}/realestate/reserve`, data)
   }
 }

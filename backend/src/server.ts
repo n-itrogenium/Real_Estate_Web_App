@@ -6,6 +6,7 @@ import userRouter from './routes/user.routes';
 import adminRouter from './routes/admin.routes';
 import realEstateRouter from './routes/real-estate.routes';
 import msgRouter from './routes/msg.routes';
+import offerRouter from './routes/offer.routes';
 
 const app = express();
 
@@ -23,6 +24,7 @@ router.use('/users', userRouter); //rutu za korisnike obrađuje ruter za korisni
 router.use('/admin', adminRouter);
 router.use('/realestate', realEstateRouter);
 router.use('/msg', msgRouter);
+router.use('/offer', offerRouter);
 
 app.use('/', router);
 app.listen(4000, () => console.log(`Express server running on port 4000`));

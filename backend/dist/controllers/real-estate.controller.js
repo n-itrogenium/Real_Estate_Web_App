@@ -4,6 +4,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.RealEstateController = void 0;
+const rent_1 = __importDefault(require("../models/rent"));
+const contract_1 = __importDefault(require("../models/contract"));
 const real_estate_1 = __importDefault(require("../models/real-estate"));
 class RealEstateController {
     constructor() {
@@ -107,6 +109,40 @@ class RealEstateController {
                 }
                 if (data)
                     res.status(200).json({ 'message': 'real estate removed from promoted' });
+            });
+        };
+        this.sellRealEstate = (req, res) => {
+            contract_1.default.collection.insertOne(req.body, (err, data) => {
+                if (err) {
+                    console.log(err);
+                }
+                else {
+                    if (req.body.sale == 1) {
+                        var mongo = require('mongodb');
+                        var o_id = new mongo.ObjectID(req.body.realestate);
+                        real_estate_1.default.collection.updateOne({ "_id": o_id }, { $set: { 'sold': true } }, (err, data) => {
+                            if (err)
+                                console.log(err);
+                        });
+                    }
+                    res.status(200).json({ 'message': 'contract added' });
+                }
+            });
+        };
+        this.getRents = (req, res) => {
+            rent_1.default.find({}, (err, rents) => {
+                if (err)
+                    console.log(err);
+                else
+                    res.json(rents);
+            });
+        };
+        this.reserve = (req, res) => {
+            rent_1.default.collection.insertOne(req.body, (err, data) => {
+                if (err)
+                    console.log(err);
+                else
+                    res.status(200).json({ 'message': 'reserved' });
             });
         };
     }

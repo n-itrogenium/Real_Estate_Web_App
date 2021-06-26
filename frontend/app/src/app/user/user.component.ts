@@ -22,7 +22,7 @@ export class UserComponent implements OnInit {
   ngOnInit(): void {
     this.user = JSON.parse(localStorage.getItem('loggedUser'));
     this.realEstateService.getAllRealEstateService().subscribe((data:RealEstate[]) => {
-      this.real_estate = data.filter(re => re.approved == true);
+      this.real_estate = data.filter(re => re.approved == true && re.sold == false);
       //this.result_real_estate = data;
     })
     this.applyCityFilter = false;

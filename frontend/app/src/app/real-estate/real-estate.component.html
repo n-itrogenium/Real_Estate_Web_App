@@ -1,8 +1,52 @@
 <table>
+    <tr *ngIf='real_estate.sale==0'>
+        <td>Početni datum:</td>
+        <td>
+            <select type='number' name='day1' [(ngModel)]='day1'>
+                <option *ngFor='let d of days' value='{{d}}'>{{d}}</option>
+            </select>
+        </td>
+        <td>
+            <select type='number' name='month1' [(ngModel)]='month1'>
+                <option *ngFor='let m of months' value='{{m}}'>{{m}}</option>
+            </select>
+        </td>
+        <td>
+            <select type='number' name='year1' [(ngModel)]='year1'>
+                <option *ngFor='let y of years' value='{{y}}'>{{y}}</option>
+            </select>
+        </td>
+
+        <td>Krajnji datum:</td>
+        <td>
+            <select type='number' name='day2' [(ngModel)]='day2'>
+                <option *ngFor='let d of days' value='{{d}}'>{{d}}</option>
+            </select>
+        </td>
+        <td>
+            <select type='number' name='month2' [(ngModel)]='month2'>
+                <option *ngFor='let m of months' value='{{m}}'>{{m}}</option>
+            </select>
+        </td>
+        <td>
+            <select type='number' name='year2' [(ngModel)]='year2'>
+                <option *ngFor='let y of years' value='{{y}}'>{{y}}</option>
+            </select>
+        </td>
+        <td><button (click)='checkDate()'>Proveri dostupnost</button></td>
+        <td><span style='color:darkmagenta'>{{message}}</span></td>
+        <td *ngIf='free && user.type == 1 && user.username != real_estate.owner'>
+            <button (click)='reserve()'>Zatraži rezervaciju</button>
+        </td>
+    </tr>
+</table>
+
+<table>
+
     <tr>
         <td>{{real_estate.name}}</td>
     </tr>
-    
+
     <tr>
         <td>{{real_estate.address}}, {{real_estate.municipality}}, {{real_estate.city}}</td>
     </tr>
@@ -57,7 +101,7 @@
         <td>{{real_estate.owner}}</td>
         <td *ngIf='(real_estate.owner != user.username && user.type == 1) ||
             (user.type == 2 && real_estate.owner != "Agencija")'>
-                <button routerLink='/composeMessage'>Kontaktiraj vlasnika</button>
+            <button routerLink='/composeMessage'>Kontaktiraj vlasnika</button>
         </td>
     </tr>
 

@@ -31,5 +31,17 @@ realEstateRouter.route('/removeFromPromoted').post(
     (req, res) => new RealEstateController().removeFromPromoted(req, res)
 );
 
+realEstateRouter.route('/sellRealEstate').post(
+    (req, res) => new RealEstateController().sellRealEstate(req, res)
+);
+
+realEstateRouter.route('/getRents').get(
+    (req, res) => new RealEstateController().getRents(req, res)
+)
+
+realEstateRouter.route('/reserve').post(
+    (req, res) => new RealEstateController().reserve(req, res)
+)
+
 
 export default realEstateRouter;
