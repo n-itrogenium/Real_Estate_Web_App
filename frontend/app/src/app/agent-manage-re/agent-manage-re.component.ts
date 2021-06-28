@@ -191,9 +191,10 @@ export class AgentManageReComponent implements OnInit {
         if (this.rents[i]._id != rent._id) {
           let i_startdate = new Date(this.rents[i].startdate);
           let i_enddate = new Date(this.rents[i].enddate);
-          if (i_startdate > startdate && i_startdate < enddate ||
+          if (rent.realestate == this.rents[i].realestate &&
+            (i_startdate > startdate && i_startdate < enddate ||
             i_enddate > startdate && i_enddate < enddate ||
-            i_startdate <= startdate && i_enddate >= enddate) {
+            i_startdate <= startdate && i_enddate >= enddate)) {
             this.realEstateService.deleteRentService(this.rents[i]._id).subscribe();
           }
         }

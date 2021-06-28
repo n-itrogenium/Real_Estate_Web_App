@@ -4,6 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.OfferController = void 0;
+const real_estate_1 = __importDefault(require("../models/real-estate"));
 const contract_1 = __importDefault(require("../models/contract"));
 const offer_1 = __importDefault(require("../models/offer"));
 class OfferController {
@@ -37,10 +38,15 @@ class OfferController {
         this.acceptOffer = (req, res) => {
             var mongo = require('mongodb');
             var o_id = new mongo.ObjectID(req.body.offer_id);
+            var r_id = new mongo.ObjectID(req.body.realestate);
             offer_1.default.collection.updateMany({ 'realestate': req.body.realestate }, { $set: { 'accepted': false } }, (err, offer) => {
                 if (err)
                     console.log(err);
                 else {
+                    real_estate_1.default.collection.updateOne({ '_id': r_id }, { $set: { 'sold': true } }, (err, data) => {
+                        if (err)
+                            console.log(err);
+                    });
                     offer_1.default.collection.updateOne({ '_id': o_id }, { $set: { 'accepted': true } }, (err, data) => {
                         if (err)
                             console.log(err);
@@ -85,6 +91,11 @@ class OfferController {
                     console.log(err);
                 }
                 else {
+                    o_id = new mongo.ObjectID(req.body.realestate);
+                    real_estate_1.default.collection.updateOne({ '_id': o_id }, { $set: { 'sold': false } }, (err, data) => {
+                        if (err)
+                            console.log(err);
+                    });
                     offer_1.default.collection.updateMany({ 'realestate': req.body.realestate }, {
                         $set: { 'accepted': null }
                     }, (err, data) => {

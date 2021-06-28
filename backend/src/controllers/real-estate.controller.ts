@@ -65,10 +65,10 @@ export class RealEstateController {
                 res.status(400).json({ 'message': 'real estate not deleted' });
             }
             if (data) {
-                Contract.collection.deleteMany({'realestate': req.body._id});
-                MsgThread.collection.deleteMany({'realestate': req.body._id});
-                Offer.collection.deleteMany({'realestate': req.body._id});
-                Rent.collection.deleteMany({'realestate': req.body._id});
+                Contract.collection.deleteMany({ 'realestate': req.body._id });
+                MsgThread.collection.deleteMany({ 'realestate': req.body._id });
+                Offer.collection.deleteMany({ 'realestate': req.body._id });
+                Rent.collection.deleteMany({ 'realestate': req.body._id });
                 res.status(200).json({ 'message': 'real estate deleted' });
             }
         });

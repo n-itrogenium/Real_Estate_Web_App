@@ -1,4 +1,5 @@
 import express from 'express';
+import RealEstate from '../models/real-estate';
 import Contract from '../models/contract';
 import Offer from '../models/offer'
 
@@ -32,11 +33,14 @@ export class OfferController {
     acceptOffer = (req: express.Request, res: express.Response) => {
         var mongo = require('mongodb');
         var o_id = new mongo.ObjectID(req.body.offer_id);
-
+        var r_id = new mongo.ObjectID(req.body.realestate);
 
         Offer.collection.updateMany({ 'realestate': req.body.realestate }, { $set: { 'accepted': false } }, (err, offer) => {
             if (err) console.log(err);
             else {
+                RealEstate.collection.updateOne({'_id': r_id}, { $set: { 'sold': true } }, (err, data) => {
+                    if (err) console.log(err);
+                })
                 Offer.collection.updateOne({ '_id': o_id }, { $set: { 'accepted': true } }, (err, data) => {
                     if (err) console.log(err);
                     else res.status(200).json({ 'message': 'offer accepted' });
@@ -82,6 +86,10 @@ export class OfferController {
                 res.status(400).json({ 'message': 'offer not deleted' });
                 console.log(err);
             } else {
+                o_id = new mongo.ObjectID(req.body.realestate);
+                RealEstate.collection.updateOne({'_id': o_id}, { $set: { 'sold': false } }, (err, data) => {
+                    if (err) console.log(err);
+                });
                 Offer.collection.updateMany({ 'realestate': req.body.realestate },
                     {
                         $set: { 'accepted': null }

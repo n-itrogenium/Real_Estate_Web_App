@@ -7,9 +7,6 @@ const express_1 = __importDefault(require("express"));
 const offer_controller_1 = require("../controllers/offer.controller");
 const offerRouter = express_1.default.Router();
 offerRouter.route('/getAllOffers').get((req, res) => new offer_controller_1.OfferController().getAllOffers(req, res));
-/*offerRouter.route('/findOffers').post(
-    (req, res) => new OfferController().findOffers(req, res)
-); */
 offerRouter.route('/makeOffer').post((req, res) => new offer_controller_1.OfferController().makeOffer(req, res));
 offerRouter.route('/acceptOffer').post((req, res) => new offer_controller_1.OfferController().acceptOffer(req, res));
 offerRouter.route('/declineOffer').post((req, res) => new offer_controller_1.OfferController().declineOffer(req, res));
