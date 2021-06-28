@@ -1,0 +1,17 @@
+.msg {
+    margin: 20px;
+    padding: 10px;
+    background-color: rgb(228, 237, 238);
+    border-radius: 10px;
+    width: 750px;
+}
+
+h1 {
+    margin-top: 50px;
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.container {
+    margin-bottom: 50px;
+}

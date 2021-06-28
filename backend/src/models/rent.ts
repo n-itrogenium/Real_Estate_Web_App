@@ -4,6 +4,9 @@ const Schema = mongoose.Schema;
 
 let Rent = new Schema(
     {
+        _id: {
+            type: String
+        },
         realestate: {
             type: String,
             required: true
@@ -19,6 +22,11 @@ let Rent = new Schema(
         enddate: {
             type: Date,
             required: true
+        },
+        valid: {
+            type: Boolean,
+            required: true,
+            default: false
         }
     }
 );

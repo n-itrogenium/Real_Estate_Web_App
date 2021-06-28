@@ -6,6 +6,8 @@ import { Chart } from 'chart.js';
 import { RealEstateService } from '../real-estate.service';
 import { RealEstate } from '../models/real-estate';
 import { Percentage } from '../models/percentage';
+import { Contract } from '../models/contract';
+import { OfferService } from '../offer.service';
 
 @Component({
   selector: 'app-admin',
@@ -17,13 +19,21 @@ export class AdminComponent implements OnInit {
   constructor(
     private realEstateService: RealEstateService,
     private adminService: AdminService,
+    private offerService: OfferService,
     private notif: MatSnackBar,
     private router: Router) { }
 
   sale: number;
   rent: number;
+  real_estate: RealEstate[];
+  contracts: Contract[];
+  income: number = 0;
 
   ngOnInit(): void {
+    let user = JSON.parse(localStorage.getItem('loggedUser'));
+    if (user == null || (user != null && user.type != 0))
+      this.router.navigate(['/pageNotFound']);
+      
     this.realEstateService.getAllRealEstateService().subscribe((data: RealEstate[]) => {
       data = data.filter(re => re.approved == true);
       this.showRentPriceChart(data.filter(re => re.sale == 0));
@@ -31,13 +41,35 @@ export class AdminComponent implements OnInit {
       this.showCityChart(data);
       this.showApartmentChart(data.filter(re => re.type == 1));
       this.showHouseChart(data.filter(re => re.type == 0));
+      this.real_estate = data;
+      this.offerService.getAllContractsService().subscribe((data: Contract[]) => {
+        this.contracts = data;
+        this.adminService.getPercentageService().subscribe((percentage: Percentage) => {
+          if (percentage) {
+            this.sale = percentage.sale;
+            this.rent = percentage.rent;
+  
+            for (let i = 0; i < data.length; i++) {
+              let re = this.real_estate.find(re => re._id == data[i].realestate);
+              let factor: number;
+              if (re.sale == 0) {
+                factor = (re.owner == 'Agencija') ? 1 : (percentage.rent / 100);
+              }
+              else {
+                factor = (re.owner == 'Agencija') ? 1 : (percentage.sale / 100);
+              }
+              this.income += data[i].price * factor;
+            }
+          }
+        })
+      });
     });
-    this.adminService.getPercentageService().subscribe((data: Percentage) => {
+    /*this.adminService.getPercentageService().subscribe((data: Percentage) => {
       if (data) {
         this.sale = data.sale;
         this.rent = data.rent;
       }
-    });
+    });*/
   }
 
   logOut(): void {
@@ -111,7 +143,7 @@ export class AdminComponent implements OnInit {
           DBdata.filter(re => re.price >= 300_000).length
         ],
         fill: false,
-        backgroundColor: 'rgb(190, 110, 219)',
+        backgroundColor: 'rgb(110, 194, 219)',
         tension: 0.1
       }]
     };
@@ -132,10 +164,10 @@ export class AdminComponent implements OnInit {
           DBdata.filter(re => re.city == 'Novi Sad').length,
           DBdata.filter(re => re.city == 'Niš').length,
           DBdata.filter(re => re.city == 'Kragujevac').length,
-          DBdata.filter(re => re.city == 'Ostalo').length
+          DBdata.filter(re => re.city != 'Beograd' && re.city != 'Novi Sad' && re.city != 'Niš' && re.city != 'Kragujevac').length
         ],
         fill: true,
-        backgroundColor: 'rgb(219, 110, 164)',
+        backgroundColor: 'rgb(110, 194, 219)',
         tension: 0.1
       }]
     };
@@ -156,7 +188,7 @@ export class AdminComponent implements OnInit {
           DBdata.filter(re => re.sale == 0).length
         ],
         fill: false,
-        backgroundColor: 'rgb(82, 217, 143)',
+        backgroundColor: 'rgb(110, 194, 219)',
         tension: 0.1
       }]
     };
@@ -179,7 +211,7 @@ export class AdminComponent implements OnInit {
           DBdata.filter(re => re.sale == 0).length
         ],
         fill: false,
-        backgroundColor: 'rgb(224, 174, 99)',
+        backgroundColor: 'rgb(110, 194, 219)',
         tension: 0.1
       }]
     };

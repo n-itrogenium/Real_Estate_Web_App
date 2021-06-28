@@ -1,14 +1,26 @@
-<mat-sidenav-container>
-    <mat-sidenav>Start</mat-sidenav>
-    <mat-sidenav-content>Main</mat-sidenav-content>
-  </mat-sidenav-container>
+<nav class="navbar navbar-light bg-light">
+  <ul class="nav nav-pills">
+    <li class="nav-item active">
+      <a class="nav-link active" routerLink='/admin'>Početna</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" routerLink='/admin/requests'>Pregledaj zahteve</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" routerLink='/admin/update'>Upravljaj korisnicima</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" routerLink='/admin/add'>Dodaj korisnika ili nekretninu</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" (click)='logOut()' routerLink=''>Odjavi se</a>
+    </li>
+  </ul>
+</nav>
 
-  <a routerLink='requests'>Pregledaj zahteve</a>
-  <br><br>
-  <a routerLink='update'>Upravljaj korisnicima</a>
-  <br><br>
-  <a routerLink='add'>Dodaj korisnika ili nekretninu</a>
+<div class="container">
 
+  <h1>Procenat za posredovanje agencije</h1>
   <form>
     <tr>
       <td>Procenat za prodaju:</td>
@@ -22,10 +34,37 @@
     </tr>
   </form>
 
+  <h1>Analitika</h1>
   <div class="row">
-    <div class="column"><canvas id="rentPriceChart" height="50"></canvas></div>
-    <div class="column"><canvas id="salePriceChart" height="50"></canvas></div>
-    <div class="column"><canvas id="cityChart" height="50"></canvas></div>
-    <div class="column"><canvas id="apartmentChart" height="50"></canvas></div>
-    <div class="column"><canvas id="houseChart" height="50"></canvas></div>
+    <div class="col-sm-4"><canvas id="rentPriceChart"></canvas></div>
+    <div class="col-sm-4"><canvas id="salePriceChart"></canvas></div>
+    <div class="col-sm-4"><canvas id="cityChart"></canvas></div>
+  </div>
+  <div class="row">
+    <div class="col-sm-4"><canvas id="apartmentChart"></canvas></div>
+    <div class="col-sm-4"><canvas id="houseChart"></canvas></div>
+  </div>
+
+  <h1>Svi ugovori</h1>
+  <h2>Ukupan prihod agencije: {{income}} €</h2>
+
+  <table>
+    <tr style='background-color:lightblue; text-align: center;'>
+      <th>Nekretnina</th>
+      <th>Vlasnik</th>
+      <th>Kupac</th>
+      <th>Cena</th>
+    </tr>
+    <tr *ngFor='let c of contracts' style='background-color:rgb(238, 238, 238)'>
+      <td>
+        <div *ngFor='let re of real_estate'>
+          <div *ngIf='re._id == c.realestate'>{{re.name}}</div>
+        </div>
+      </td>
+      <td>{{c.owner}}</td>
+      <td>{{c.client}}</td>
+      <td>{{c.price}}</td>
+    </tr>
+  </table>
+
 </div>

@@ -14,7 +14,10 @@ const msg_routes_1 = __importDefault(require("./routes/msg.routes"));
 const offer_routes_1 = __importDefault(require("./routes/offer.routes"));
 const app = express_1.default();
 app.use(cors_1.default());
-app.use(body_parser_1.default.json()); //podaci se razmenjuju u JSON formatu
+//app.use(bodyParser.json()); //podaci se razmenjuju u JSON formatu
+app.use(body_parser_1.default.json({ limit: '50mb' }));
+app.use(body_parser_1.default.urlencoded({ limit: '50mb', extended: true }));
+app.use(express_1.default.json());
 mongoose_1.default.connect('mongodb://localhost:27017/mydb');
 const connection = mongoose_1.default.connection;
 connection.once('open', () => {

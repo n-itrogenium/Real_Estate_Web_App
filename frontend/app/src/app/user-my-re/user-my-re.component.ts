@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { RealEstate } from '../models/real-estate';
+import { User } from '../models/user';
 import { RealEstateService } from '../real-estate.service';
 
 @Component({
@@ -17,11 +18,14 @@ export class UserMyReComponent implements OnInit {
     private notif: MatSnackBar) { }
 
   my_real_estate: RealEstate[]
+  user: User;
 
   ngOnInit(): void {
-    let owner = JSON.parse(localStorage.getItem('loggedUser'));
+    this.user = JSON.parse(localStorage.getItem('loggedUser'));
+    if (this.user == null || this.user != null && this.user.type != 1)
+      this.router.navigate(['/pageNotFound']);
     this.realEstateService.getAllRealEstateService().subscribe((data:RealEstate[]) => {
-      this.my_real_estate = data.filter(re => re.owner == owner.username);
+      this.my_real_estate = data.filter(re => re.owner == this.user.username);
       for ( let i: number = 0; i < data.length; i++) {
         if (this.my_real_estate[i].gallery != null) {
           let random_img: number = Math.floor(Math.random() * this.my_real_estate[i].gallery.length);
@@ -32,6 +36,11 @@ export class UserMyReComponent implements OnInit {
         }
       }
     })
+  }
+
+  logOut(): void {
+    localStorage.clear();
+    this.router.navigate(['']);
   }
 
   openPage(selectedRealEstate): void {

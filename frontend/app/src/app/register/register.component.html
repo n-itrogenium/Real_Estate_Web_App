@@ -1,72 +1,84 @@
-<table>
-    <tr>
-        <td>Odaberite kategoriju:</td>
-        <td>
-            <select name='type' [(ngModel)]='type'>
-                <option value="1">Korisnik</option>
-                <option value="2">Agent</option>
-            </select>
-        </td>
-    </tr>
-    <tr>
-        <td>Ime:</td>
-        <td>
-            <input type='text' name='name' [(ngModel)]='name'>
-        </td>
-    </tr>
-    <tr>
-        <td>Prezime:</td>
-        <td>
-            <input type='text' name='surname' [(ngModel)]='surname'>
-        </td>
-    </tr>
-    <tr>
-        <td>Korisničko ime:</td>
-        <td>
-            <input type='text' name='username' [(ngModel)]='username'>
-        </td>
-    </tr>
-    <tr>
-        <td>Lozinka:</td>
-        <td>
-            <input type='password' name='password' [(ngModel)]='password'>
-        </td>
-    </tr>
-    <tr>
-        <td>Potvrdite lozinku:</td>
-        <td>
-            <input type='password' name='password_2' [(ngModel)]='password_2'>
-        </td>
-    </tr>
-    
-    <tr>
-        <td>Profilna slika:</td> 
-        <td>
-            <input type='file' name='avatar' accept='image/*' (change)='onFileSelected($event)' [(ngModel)]='avatar'>
-        </td>
-    </tr>
-    
-    <tr>
-        <td>E-mail adresa:</td>
-        <td>
-            <input type='text' name='mail' [(ngModel)]='mail'>
-        </td>
-    </tr>
-    <tr>
-        <td>Mesto stanovanja:</td>
-        <td>
-            <input type='text' name='city' [(ngModel)]='city'>
-        </td>
-    </tr>
-    <tr>
-        <td>Država:</td>
-        <td>
-            <input type='text' name='country' [(ngModel)]='country'>
-        </td>
-    </tr>
-    <tr>
-        <td colspan="2">
-            <button (click)='register()'>Registrujte se</button>
-        </td>
-    </tr>
-</table>
+<nav class="navbar navbar-light bg-light">
+    <ul class="nav nav-pills">
+        <li class="nav-item">
+            <a class="nav-link" routerLink=''>Prijavi se</a>
+        </li>
+    </ul>
+</nav>
+
+<div class="container">
+    <table>
+        <tr>
+            <td>Odaberite kategoriju:</td>
+            <td>
+                <select name='type' [(ngModel)]='type'>
+                    <option value="1">Korisnik</option>
+                    <option value="2">Agent</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>Ime:</td>
+            <td>
+                <input type='text' name='name' [(ngModel)]='name'>
+            </td>
+        </tr>
+        <tr>
+            <td>Prezime:</td>
+            <td>
+                <input type='text' name='surname' [(ngModel)]='surname'>
+            </td>
+        </tr>
+        <tr>
+            <td>Korisničko ime:</td>
+            <td>
+                <input type='text' name='username' [(ngModel)]='username'>
+            </td>
+        </tr>
+        <tr>
+            <td>Lozinka:</td>
+            <td>
+                <input type='password' name='password' [(ngModel)]='password'>
+            </td>
+        </tr>
+        <tr>
+            <td>Potvrdite lozinku:</td>
+            <td>
+                <input type='password' name='password_2' [(ngModel)]='password_2'>
+            </td>
+        </tr>
+
+        <tr>
+            <td>Profilna slika:</td>
+            <td>
+                <input type='file' name='avatar' accept='image/*' (change)='onFileSelected($event)'
+                    [(ngModel)]='avatar'>
+            </td>
+        </tr>
+
+        <tr>
+            <td>E-mail adresa:</td>
+            <td>
+                <input type='text' name='mail' [(ngModel)]='mail'>
+            </td>
+        </tr>
+        <tr>
+            <td>Mesto stanovanja:</td>
+            <td>
+                <input type='text' name='city' [(ngModel)]='city'>
+            </td>
+        </tr>
+        <tr>
+            <td>Država:</td>
+            <td>
+                <input type='text' name='country' [(ngModel)]='country'>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <button (click)='register()'>Registrujte se</button>
+            </td>
+        </tr>
+    </table>
+
+</div>

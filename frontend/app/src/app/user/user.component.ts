@@ -18,12 +18,24 @@ export class UserComponent implements OnInit {
   user: User;
 
   real_estate: RealEstate[];
+  promo: RealEstate[];
 
   ngOnInit(): void {
     this.user = JSON.parse(localStorage.getItem('loggedUser'));
+    if (this.user == null || this.user != null && this.user.type != 1)
+      this.router.navigate(['/pageNotFound']);
     this.realEstateService.getAllRealEstateService().subscribe((data:RealEstate[]) => {
       this.real_estate = data.filter(re => re.approved == true && re.sold == false);
-      //this.result_real_estate = data;
+      this.promo = data.filter(re => re.approved == true && re.sold == false && re.promo == true);
+      for ( let i: number = 0; i < data.length; i++) {
+        if (this.real_estate[i].gallery != null) {
+          let random_img: number = Math.floor(Math.random() * this.real_estate[i].gallery.length);
+          let help: string;
+          help = this.real_estate[i].gallery[0];
+          this.real_estate[i].gallery[0] = this.real_estate[i].gallery[random_img];
+          this.real_estate[i].gallery[random_img] = help;
+        }
+      }
     })
     this.applyCityFilter = false;
     this.applyMinPriceFilter = false;
@@ -71,7 +83,8 @@ export class UserComponent implements OnInit {
 
 
   openPage(selectedRealEstate): void {
-    localStorage.setItem('viewRealEstate', JSON.stringify(selectedRealEstate));
+    let re = this.real_estate.find(re => re._id == selectedRealEstate._id);
+    localStorage.setItem('viewRealEstate', JSON.stringify(re));
     this.router.navigate(['/realestate']);
   }
 

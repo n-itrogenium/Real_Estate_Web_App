@@ -1,114 +1,172 @@
-<!-----------------------------KONVERZACIJA----------------------------->
-
-<h1>Konverzacija: {{thread.subject}}</h1>
-<div *ngIf='block == null'>
-    <button *ngIf='thread.active' (click)='archiveThread()'>Arhiviraj konverzaciju</button>
-    <button *ngIf='!thread.active' (click)='archiveThread()'>Vrati konverzaciju iz arhive</button>
+<div *ngIf='loggedUser.type == 1'>
+    <nav class="navbar navbar-light bg-light">
+        <ul class="nav nav-pills">
+            <li class="nav-item">
+                <a class="nav-link" routerLink='/user'>Početna</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" routerLink='/user/myRealEstate'>Moje nekretnine</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" routerLink='/user/addRealEstate'>Dodaj nekretninu</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" routerLink='/user/update'>Moj nalog</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link active" routerLink='/inbox'>Poruke</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" (click)='logOut()' routerLink=''>Odjavi se</a>
+            </li>
+        </ul>
+    </nav>
 </div>
 
-<table *ngFor='let m of messages'>
-    <ng-container *ngIf='thread.realestate != null'>
-
-        <tr *ngIf='m.from != loggedUser.username && loggedUser.type == 1'>
-            <td *ngIf='owner && otherUser != "Agencija"'>{{m.from}}</td>
-            <td *ngIf='owner && otherUser == "Agencija"'>Agencija</td>
-            <td *ngIf='!owner'>Vlasnik nekretnine</td>
-        </tr>
-
-        <tr *ngIf='m.from != loggedUser.username && loggedUser.type == 2'>
-            <td *ngIf='owner && (m.from == thread.user1 || m.from == thread.user2)'>{{m.from}}</td>
-            <td *ngIf='!owner && (m.from == thread.user1 || m.from == thread.user2) && m.from != "Agencija"'>Vlasnik
-                nekretnine</td>
-            <td *ngIf='!owner && m.from == "Agencija"'>Agencija</td>
-            <td *ngIf='m.from != thread.user1 && m.from != thread.user2'>{{m.from}} [Agencija]</td>
-        </tr>
-
-        <tr *ngIf='m.from == loggedUser.username'>
-            <td>Ja</td>
-            <td *ngIf='loggedUser.type == 2'>[Agencija]</td>
-        </tr>
-    </ng-container>
-
-    <ng-container *ngIf='thread.realestate == null'>
-        <tr>
-            <td>{{m.from}}</td>
-        </tr>
-    </ng-container>
-
-    <tr>
-        <td>({{m.timestamp | date: 'dd. MM. yyyy. u HH.mm' }}):</td>
-    </tr>
-
-    <tr>
-        <td>{{m.content}}</td>
-    </tr>
-
-</table>
-
-<form *ngIf='block == null'>
-    <tr>
-        <td>Odgovori:</td>
-        <td><textarea name='content' [(ngModel)]='content'></textarea></td>
-    </tr>
-
-    <tr>
-        <td colspan='2'>
-            <button (click)='send()'>Pošalji</button>
-        </td>
-    </tr>
-
-    <button (click)='blockUser()' *ngIf='loggedUser.type == 1 && otherUser != "Agencija"'>Blokiraj korisnika</button>
-</form>
-
-<div *ngIf='block != null && block.blocker == loggedUser.username'>
-    <p>Nije moguće nastaviti konverzaciju zato što ste blokirali korisnika.</p>
-    <button (click)='unblockUser()'>Odblokiraj korisnika</button>
+<div *ngIf='loggedUser.type == 2'>
+    <nav class="navbar navbar-light bg-light">
+        <ul class="nav nav-pills">
+            <li class="nav-item">
+                <a class="nav-link" routerLink='/agent'>Početna</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" routerLink='/agent/manageRealEstate'>Upravljaj nekretninama</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" routerLink='/agent/manageRealEstate/myRealEstate'>Nekretnine agencije</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" routerLink='/agent/addRealEstate'>Dodaj nekretninu</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" routerLink='/agent/update'>Moj nalog</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link active" routerLink='/inbox'>Poruke</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" (click)='logOut()' routerLink=''>Odjavi se</a>
+            </li>
+        </ul>
+    </nav>
 </div>
 
-<p *ngIf='block != null && block.blocked == loggedUser.username'>Nije moguće nastaviti konverzaciju zato što Vas je
-    korisnik
-    blokirao.</p>
+<div class="container">
 
+    <!-----------------------------KONVERZACIJA----------------------------->
 
-<!-----------------------------PONUDE ZA PLAĆANJE----------------------------->
+    <h1>Konverzacija: {{thread.subject}}</h1>
+    <div *ngIf='block == null'>
+        <button *ngIf='thread.active' (click)='archiveThread()'>Arhiviraj konverzaciju</button>
+        <button *ngIf='!thread.active' (click)='archiveThread()'>Vrati konverzaciju iz arhive</button>
+    </div>
 
-<div *ngIf='thread.realestate != null && realestate.sale == 1'>
+    <table *ngFor='let m of messages'>
+        <div class="msg">
+        <div *ngIf='thread.realestate != null'>
 
-    <form *ngIf='!owner && loggedUser.type == 1'>
-        <h1>Daj ponudu</h1>
-        <div *ngIf='offerMade'>
-            <p *ngIf='offer.accepted == null'>STATUS: U OBRADI</p>
-            <p *ngIf='offer.accepted == true'>STATUS: PRIHVAĆENO</p>
-            <p *ngIf='offer.accepted == false'>STATUS: ODBIJENO</p>
-        </div>
-        <div *ngIf='!offerMade'>
-            <tr>
-                <td>Iznos: </td>
-                <td><input type='number' name='amount' [(ngModel)]='amount'>€</td>
+            <tr *ngIf='m.from != loggedUser.username && loggedUser.type == 1'>
+                <td *ngIf='owner && otherUser != "Agencija"'>{{m.from}}</td>
+                <td *ngIf='owner && otherUser == "Agencija"'>Agencija</td>
+                <td *ngIf='!owner'>Vlasnik nekretnine</td>
             </tr>
-            <tr>
-                <td><button (click)='makeOffer()'>Daj ponudu</button></td>
+
+            <tr *ngIf='m.from != loggedUser.username && loggedUser.type == 2'>
+                <td *ngIf='owner && (m.from == thread.user1 || m.from == thread.user2)'>{{m.from}}</td>
+                <td *ngIf='!owner && (m.from == thread.user1 || m.from == thread.user2) && m.from != "Agencija"'>Vlasnik
+                    nekretnine</td>
+                <td *ngIf='!owner && m.from == "Agencija"'>Agencija</td>
+                <td *ngIf='m.from != thread.user1 && m.from != thread.user2'>{{m.from}} [Agencija]</td>
+            </tr>
+
+            <tr *ngIf='m.from == loggedUser.username'>
+                <td>Ja</td>
+                <td *ngIf='loggedUser.type == 2'>[Agencija]</td>
             </tr>
         </div>
-    </form>
 
-    <form *ngIf='owner && offerMade'>
-        <h1>Odgovori na ponudu</h1>
+        <div *ngIf='thread.realestate == null'>
+            <tr>
+                <td>{{m.from}}</td>
+            </tr>
+        </div>
+
+        <tr style="font-style: italic">
+            <td>({{m.timestamp | date: 'dd. MM. yyyy. u HH.mm' }}):</td>
+        </tr>
+
         <tr>
-            <td>Ponuda: </td>
-            <td>{{offer.amount}} €</td>
+            <td>{{m.content}}</td>
         </tr>
-        <tr *ngIf='offer.accepted == null'>
-            <td><button (click)='acceptOffer()'>Prihvati</button></td>
-            <td><button (click)='declineOffer()'>Odbij</button></td>
+    </div>
+    </table>
+
+    <form *ngIf='block == null'>
+        <tr>
+            <td>Odgovori:</td>
+            <td><textarea name='content' [(ngModel)]='content'></textarea></td>
         </tr>
-        <tr *ngIf='offer.accepted == true'>
-            <td>STATUS: PRIHVAĆENO</td>
+
+        <tr>
+            <td colspan='2'>
+                <button (click)='send()'>Pošalji</button>
+            </td>
         </tr>
-        <tr *ngIf='offer.accepted == false'>
-            <td>STATUS: ODBIJENO</td>
-        </tr>
+
+        <button (click)='blockUser()' *ngIf='loggedUser.type == 1 && otherUser != "Agencija"'>Blokiraj
+            korisnika</button>
     </form>
 
+    <div *ngIf='block != null && block.blocker == loggedUser.username'>
+        <p>Nije moguće nastaviti konverzaciju zato što ste blokirali korisnika.</p>
+        <button (click)='unblockUser()'>Odblokiraj korisnika</button>
+    </div>
+
+    <p *ngIf='block != null && block.blocked == loggedUser.username'>Nije moguće nastaviti konverzaciju zato što Vas je
+        korisnik
+        blokirao.</p>
+
+
+    <!-----------------------------PONUDE ZA PLAĆANJE----------------------------->
+
+    <div *ngIf='thread.realestate != null && realestate.sale == 1'>
+
+        <form *ngIf='!owner && loggedUser.type == 1'>
+            <h1>Daj ponudu</h1>
+            <div *ngIf='offerMade'>
+                <p *ngIf='offer.accepted == null'>STATUS: U OBRADI</p>
+                <p *ngIf='offer.accepted == true'>STATUS: PRIHVAĆENO</p>
+                <p *ngIf='offer.accepted == false'>STATUS: ODBIJENO</p>
+            </div>
+            <div *ngIf='!offerMade'>
+                <tr>
+                    <td>Iznos: </td>
+                    <td><input type='number' name='amount' [(ngModel)]='amount'>€</td>
+                </tr>
+                <tr>
+                    <td><button (click)='makeOffer()'>Daj ponudu</button></td>
+                </tr>
+            </div>
+        </form>
+
+        <form *ngIf='owner && offerMade'>
+            <h1>Odgovori na ponudu</h1>
+            <tr>
+                <td>Ponuda: </td>
+                <td>{{offer.amount}} €</td>
+            </tr>
+            <tr *ngIf='offer.accepted == null'>
+                <td><button (click)='acceptOffer()'>Prihvati</button></td>
+                <td><button (click)='declineOffer()'>Odbij</button></td>
+            </tr>
+            <tr *ngIf='offer.accepted == true'>
+                <td>STATUS: PRIHVAĆENO</td>
+            </tr>
+            <tr *ngIf='offer.accepted == false'>
+                <td>STATUS: ODBIJENO</td>
+            </tr>
+        </form>
+
+    </div>
 
 </div>

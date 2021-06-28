@@ -1,71 +1,96 @@
-<a routerLink='update'>Izmeni svoje podatke</a>
-<br>
-<a routerLink='addRealEstate'>Dodaj svoju nekretninu</a>
-<br>
-<a routerLink='myRealEstate'>Pregledaj svoje nekretnine</a>
-<br>
-<a routerLink='/inbox'>Poruke</a>
-<br>
+<nav class="navbar navbar-light bg-light">
+    <ul class="nav nav-pills">
+        <li class="nav-item">
+            <a class="nav-link active" routerLink='/user'>Početna</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" routerLink='/user/myRealEstate'>Moje nekretnine</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" routerLink='/user/addRealEstate'>Dodaj nekretninu</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" routerLink='/user/update'>Moj nalog</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" routerLink='/inbox'>Poruke</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" (click)='logOut()' routerLink=''>Odjavi se</a>
+        </li>
+    </ul>
+</nav>
 
-<!-----------------------------PROMOVISANE NEKRETNINE----------------------------->
-<h1>Za vas smo izdvojili</h1>
-<ng-container *ngFor='let re of real_estate'>
-    <table *ngIf='re.promo'>
-        <tr>{{re.name}}</tr>
-        <tr><button (click)='openPage(re)'>Pregledaj nekretninu</button></tr>
-    </table>
-</ng-container>
+<div class='container'>
 
-
-
-<!--------------------------------UNOŠENJE FILTERA-------------------------------->
-<h3>Pretraži nekretnine:</h3>
-<form>
-    <tr>
-        <td>Grad:</td>
-        <td><input type='text' name='city' [(ngModel)]='searchCity'></td>
-    </tr>
-
-    <tr>
-        <td>Opseg cena:</td>
-        <td><input type='number' name='min' placeholder='Minimalna cena' [(ngModel)]='minPrice'></td>
-        <td><input type='number' name='max' placeholder='Maksimalna cena' [(ngModel)]='maxPrice'></td>
-    </tr>
-
-    <tr>
-        <td>
-            <button (click)='search()'>Pretraži</button>
-        </td>
-    </tr>
-</form>
+    <!-----------------------------PROMOVISANE NEKRETNINE----------------------------->
+    <div style="padding:25px; background-color:rgb(224, 240, 245)">
+        <h1>Za vas smo izdvojili</h1>
+        <div class="row">
+            <div class="col-sm-3" *ngFor='let re of promo'>
+                <img src='{{re.gallery[0]}}' height='200px'>
+                <br>
+                <h3>{{re.name}}</h3>
+                <button (click)='openPage(re)'>Pregledaj nekretninu</button>
+            </div>
+        </div>
+    </div>
 
 
-<!-------------------------------REZULTATI PRETRAGE------------------------------->
 
-<h1>Pronađene nekretnine</h1>
-<ng-container *ngFor='let re of real_estate'>
-    <ng-container *ngIf='(applyCityFilter && re.city == findCity) || !applyCityFilter'>
-        <ng-container *ngIf='(applyMinPriceFilter && re.price >= findMinPrice) || !applyMinPriceFilter'>
-            <table *ngIf='(applyMaxPriceFilter && findMaxPrice >= re.price) || !applyMaxPriceFilter'>
-                <tr>
-                    <td>{{re.name}}</td>
-                </tr>
-                
-                <tr>
-                    <td>{{re.address}}, {{re.municipality}}, {{re.city}}</td>
-                </tr>
+    <!--------------------------------UNOŠENJE FILTERA-------------------------------->
+    <h1>Pretraži nekretnine:</h1>
+    <form>
+        <tr>
+            <td>Grad:</td>
+            <td><input type='text' name='city' [(ngModel)]='searchCity'></td>
+        </tr>
 
-                <tr>
-                    <td *ngIf='re.sale==0'>Izdavanje</td>
-                    <td *ngIf='re.sale==1'>Prodaja</td>
-                </tr>
+        <tr>
+            <td>Opseg cena:</td>
+            <td><input type='number' name='min' placeholder='Minimalna cena' [(ngModel)]='minPrice'></td>
+            <td><input type='number' name='max' placeholder='Maksimalna cena' [(ngModel)]='maxPrice'></td>
+        </tr>
 
-                <tr>
-                    <td>Tip:</td>
-                    <td *ngIf='re.type==0'>Kuća</td>
-                    <td *ngIf='re.type==1'>Stan</td>
-                </tr>
+        <tr>
+            <td>
+                <button (click)='search()'>Pretraži</button>
+            </td>
+        </tr>
+    </form>
 
+
+    <!-------------------------------REZULTATI PRETRAGE------------------------------->
+
+    <h1>Pronađene nekretnine</h1>
+    <ng-container *ngFor='let re of real_estate'>
+        <ng-container *ngIf='(applyCityFilter && re.city == findCity) || !applyCityFilter'>
+            <ng-container *ngIf='(applyMinPriceFilter && re.price >= findMinPrice) || !applyMinPriceFilter'>
+                <div class='card'>
+                    <table *ngIf='(applyMaxPriceFilter && findMaxPrice >= re.price) || !applyMaxPriceFilter'>
+
+                        <tr>
+                            <img src='{{re.gallery[0]}}' height='200'>
+                        </tr>
+
+                        <tr style='font-weight: bold; font-size: 20px; color:rgb(68, 162, 224)'>
+                            <td>{{re.name}}</td>
+                        </tr>
+
+                        <tr>
+                            <td>{{re.address}}, {{re.municipality}}, {{re.city}}</td>
+                        </tr>
+
+                        <tr>
+                            <td *ngIf='re.sale==0'>Izdavanje</td>
+                            <td *ngIf='re.sale==1'>Prodaja</td>
+                        </tr>
+
+                        <tr>
+                            <td *ngIf='re.type==0'>Tip: Kuća</td>
+                            <td *ngIf='re.type==1'>Tip: Stan</td>
+                        </tr>
+                        <!--
                 <tr>
                     <td *ngIf='re.type==0'>Broj spratova:</td>
                     <td *ngIf='re.type==1'>Broj spratova zgrade:</td>
@@ -92,26 +117,21 @@
                     <td>Namešten:</td>
                     <td *ngIf='re.furnished'>Da</td>
                     <td *ngIf='!re.furnished'>Ne</td>
-                </tr>
+                </tr> -->
 
-                <tr>
-                    <td *ngIf='re.sale==0'>Cena mesečnog najma:</td>
-                    <td *ngIf='re.sale==1'>Cena:</td>
-                    <td>{{re.price}} €</td>
-                </tr>
+                        <tr>
+                            <td *ngIf='re.sale==0'>Cena mesečnog najma: {{re.price}} €</td>
+                            <td *ngIf='re.sale==1'>Cena: {{re.price}} €</td>
+                        </tr>
 
-                <tr>
-                    <td>Vlasnik:</td>
-                    <td>{{re.owner}}</td>
-                </tr>
+                        <tr><button (click)='openPage(re)'>Pregledaj nekretninu</button></tr>
 
-                <tr><button (click)='openPage(re)'>Pregledaj nekretninu</button></tr>
+                        <br><br><br>
 
-                <br><br><br>
-                
-            </table>
+                    </table>
+                </div>
+            </ng-container>
         </ng-container>
     </ng-container>
-</ng-container>
 
-
+</div>

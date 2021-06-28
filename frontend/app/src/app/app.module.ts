@@ -5,7 +5,6 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { MatSidenavModule } from '@angular/material/sidenav';
 import { ChartsModule } from 'ng2-charts';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -33,6 +32,7 @@ import { AgentUpdateReComponent } from './agent-update-re/agent-update-re.compon
 import { InboxComponent } from './inbox/inbox.component';
 import { MsgthreadComponent } from './msgthread/msgthread.component';
 import { MsgComposeComponent } from './msg-compose/msg-compose.component';
+import { ErrorComponent } from './error/error.component';
 
 @NgModule({
   declarations: [
@@ -58,7 +58,8 @@ import { MsgComposeComponent } from './msg-compose/msg-compose.component';
     AgentUpdateReComponent,
     InboxComponent,
     MsgthreadComponent,
-    MsgComposeComponent
+    MsgComposeComponent,
+    ErrorComponent
   ],
   imports: [
     BrowserModule,
@@ -67,7 +68,6 @@ import { MsgComposeComponent } from './msg-compose/msg-compose.component';
     HttpClientModule,
     BrowserAnimationsModule,
     MatSnackBarModule,
-    MatSidenavModule,
     ChartsModule
   ],
   providers: [],

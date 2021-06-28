@@ -1,112 +1,198 @@
-<table>
-    <tr *ngIf='real_estate.sale==0'>
-        <td>Početni datum:</td>
-        <td>
-            <select type='number' name='day1' [(ngModel)]='day1'>
-                <option *ngFor='let d of days' value='{{d}}'>{{d}}</option>
-            </select>
-        </td>
-        <td>
-            <select type='number' name='month1' [(ngModel)]='month1'>
-                <option *ngFor='let m of months' value='{{m}}'>{{m}}</option>
-            </select>
-        </td>
-        <td>
-            <select type='number' name='year1' [(ngModel)]='year1'>
-                <option *ngFor='let y of years' value='{{y}}'>{{y}}</option>
-            </select>
-        </td>
+<div *ngIf='user.type == 1'>
+    <nav class="navbar navbar-light bg-light">
+        <ul class="nav nav-pills">
+            <li class="nav-item">
+                <a class="nav-link" routerLink='/user'>Početna</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" routerLink='/user/myRealEstate'>Moje nekretnine</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" routerLink='/user/addRealEstate'>Dodaj nekretninu</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" routerLink='/user/update'>Moj nalog</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" routerLink='/inbox'>Poruke</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" (click)='logOut()' routerLink=''>Odjavi se</a>
+            </li>
+        </ul>
+    </nav>
+</div>
 
-        <td>Krajnji datum:</td>
-        <td>
-            <select type='number' name='day2' [(ngModel)]='day2'>
-                <option *ngFor='let d of days' value='{{d}}'>{{d}}</option>
-            </select>
-        </td>
-        <td>
-            <select type='number' name='month2' [(ngModel)]='month2'>
-                <option *ngFor='let m of months' value='{{m}}'>{{m}}</option>
-            </select>
-        </td>
-        <td>
-            <select type='number' name='year2' [(ngModel)]='year2'>
-                <option *ngFor='let y of years' value='{{y}}'>{{y}}</option>
-            </select>
-        </td>
-        <td><button (click)='checkDate()'>Proveri dostupnost</button></td>
-        <td><span style='color:darkmagenta'>{{message}}</span></td>
-        <td *ngIf='free && user.type == 1 && user.username != real_estate.owner'>
-            <button (click)='reserve()'>Zatraži rezervaciju</button>
-        </td>
-    </tr>
-</table>
+<div *ngIf='user.type == 2'>
+    <nav class="navbar navbar-light bg-light">
+        <ul class="nav nav-pills">
+            <li class="nav-item">
+                <a class="nav-link" routerLink='/agent'>Početna</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" routerLink='/agent/manageRealEstate'>Upravljaj nekretninama</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" routerLink='/agent/manageRealEstate/myRealEstate'>Nekretnine agencije</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" routerLink='/agent/addRealEstate'>Dodaj nekretninu</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" routerLink='/agent/update'>Moj nalog</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" routerLink='/inbox'>Poruke</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" (click)='logOut()' routerLink=''>Odjavi se</a>
+            </li>
+        </ul>
+    </nav>
+</div>
 
-<table>
+<div class="container">
+    <!-------------------------------DATUM IZNAJMLJIVANJA------------------------------->
 
-    <tr>
-        <td>{{real_estate.name}}</td>
-    </tr>
+    <form *ngIf='real_estate.sale == 0'>
+        <tr>
+            <td>Početni datum:</td>
+            <td>
+                <select type='number' name='day1' [(ngModel)]='day1'>
+                    <option *ngFor='let d of days' value='{{d}}'>{{d}}</option>
+                </select>
+            </td>
+            <td>
+                <select type='number' name='month1' [(ngModel)]='month1'>
+                    <option *ngFor='let m of months' value='{{m}}'>{{m}}</option>
+                </select>
+            </td>
+            <td>
+                <select type='number' name='year1' [(ngModel)]='year1'>
+                    <option *ngFor='let y of years' value='{{y}}'>{{y}}</option>
+                </select>
+            </td>
 
-    <tr>
-        <td>{{real_estate.address}}, {{real_estate.municipality}}, {{real_estate.city}}</td>
-    </tr>
+            <td>Krajnji datum:</td>
+            <td>
+                <select type='number' name='day2' [(ngModel)]='day2'>
+                    <option *ngFor='let d of days' value='{{d}}'>{{d}}</option>
+                </select>
+            </td>
+            <td>
+                <select type='number' name='month2' [(ngModel)]='month2'>
+                    <option *ngFor='let m of months' value='{{m}}'>{{m}}</option>
+                </select>
+            </td>
+            <td>
+                <select type='number' name='year2' [(ngModel)]='year2'>
+                    <option *ngFor='let y of years' value='{{y}}'>{{y}}</option>
+                </select>
+            </td>
+            <td><button (click)='checkDate()'>Proveri dostupnost</button></td>
+            <td><span style='color:darkmagenta'>{{message}}</span></td>
+            <td *ngIf='free && user.type == 1 && user.username != real_estate.owner'>
+                <button (click)='reserve()'>Zatraži rezervaciju</button>
+            </td>
+        </tr>
+    </form>
 
-    <tr>
-        <td *ngIf='real_estate.sale==0'>Izdavanje</td>
-        <td *ngIf='real_estate.sale==1'>Prodaja</td>
-    </tr>
+    <!------------------------------------NAČIN PLAĆANJA------------------------------------>
 
-    <tr>
-        <td>Tip:</td>
-        <td *ngIf='real_estate.type==0'>Kuća</td>
-        <td *ngIf='real_estate.type==1'>Stan</td>
-    </tr>
+    <form *ngIf='real_estate.sale == 1 && user.type == 1 && user.username != real_estate.owner'>
+        <tr>
+            <td>Uzimanje kredita: </td>
+            <td *ngIf='!pay'><button (click)='participation()'>Da</button></td>
+            <td *ngIf='pay'><button (click)='participation()'>Ne</button></td>
+            <td *ngIf='pay' style='color:darkcyan'>Učešće: {{part}} €</td>
+        </tr>
+    </form>
 
-    <tr>
-        <td *ngIf='real_estate.type==0'>Broj spratova:</td>
-        <td *ngIf='real_estate.type==1'>Broj spratova zgrade:</td>
-        <td>{{real_estate.height}}</td>
-    </tr>
+    <!-------------------------------INFORMACIJE O NEKRETNINI------------------------------->
 
-    <tr *ngIf='real_estate.type==1'>
-        <td>Sprat:</td>
-        <td>{{real_estate.floor}}</td>
-    </tr>
+    <table>
 
-    <tr>
-        <td>Kvadratura:</td>
-        <td>{{real_estate.squaremeters}} m2</td>
-    </tr>
+        <tr>
+            <td>
+                <h1>{{real_estate.name}}</h1>
+            </td>
+        </tr>
 
-    <tr>
-        <td>Broj soba:</td>
-        <td *ngIf='real_estate.rooms==0'>Garsonjera</td>
-        <td *ngIf='real_estate.rooms>0'>{{real_estate.rooms}}</td>
-    </tr>
+        <tr>
+            <td>{{real_estate.address}}, {{real_estate.municipality}}, {{real_estate.city}}</td>
+        </tr>
 
-    <tr>
-        <td>Namešten:</td>
-        <td *ngIf='real_estate.furnished'>Da</td>
-        <td *ngIf='!real_estate.furnished'>Ne</td>
-    </tr>
+        <tr>
+            <td *ngIf='real_estate.sale==0'>Izdavanje</td>
+            <td *ngIf='real_estate.sale==1'>Prodaja</td>
+        </tr>
 
-    <tr>
-        <td *ngIf='real_estate.sale==0'>Cena mesečnog najma:</td>
-        <td *ngIf='real_estate.sale==1'>Cena:</td>
-        <td>{{real_estate.price}} €</td>
-    </tr>
+        <tr>
+            <td>Tip:</td>
+            <td *ngIf='real_estate.type==0'>Kuća</td>
+            <td *ngIf='real_estate.type==1'>Stan</td>
+        </tr>
 
-    <tr>
-        <td>Vlasnik:</td>
-        <td>{{real_estate.owner}}</td>
-        <td *ngIf='(real_estate.owner != user.username && user.type == 1) ||
+        <tr>
+            <td *ngIf='real_estate.type==0'>Broj spratova:</td>
+            <td *ngIf='real_estate.type==1'>Broj spratova zgrade:</td>
+            <td>{{real_estate.height}}</td>
+        </tr>
+
+        <tr *ngIf='real_estate.type==1'>
+            <td>Sprat:</td>
+            <td>{{real_estate.floor}}</td>
+        </tr>
+
+        <tr>
+            <td>Kvadratura:</td>
+            <td>{{real_estate.squaremeters}} m2</td>
+        </tr>
+
+        <tr>
+            <td>Broj soba:</td>
+            <td *ngIf='real_estate.rooms==0'>Garsonjera</td>
+            <td *ngIf='real_estate.rooms>0'>{{real_estate.rooms}}</td>
+        </tr>
+
+        <tr>
+            <td>Namešten:</td>
+            <td *ngIf='real_estate.furnished'>Da</td>
+            <td *ngIf='!real_estate.furnished'>Ne</td>
+        </tr>
+
+        <tr>
+            <td *ngIf='real_estate.sale==0'>Cena mesečnog najma:</td>
+            <td *ngIf='real_estate.sale==1'>Cena:</td>
+            <td>{{real_estate.price}} €</td>
+        </tr>
+
+        <tr>
+            <td>Vlasnik:</td>
+            <td>{{real_estate.owner}}</td>
+        </tr>
+
+        <tr>
+            <td *ngIf='(real_estate.owner != user.username && user.type == 1) ||
             (user.type == 2 && real_estate.owner != "Agencija")'>
-            <button routerLink='/composeMessage'>Kontaktiraj vlasnika</button>
-        </td>
-    </tr>
+                <button routerLink='/composeMessage'>Kontaktiraj vlasnika</button>
+            </td>
+        </tr>
 
-    <tr *ngIf='real_estate.owner == user.username || real_estate.owner == "Agencija" && user.type == 2'>
-        <td><button routerLink='/user/updateRealEstate'>Uredi nekretninu</button></td>
-    </tr>
+        <tr *ngIf='real_estate.owner == user.username'>
+            <td><button routerLink='/user/updateRealEstate'>Uredi nekretninu</button></td>
+        </tr>
 
-</table>
+        <tr *ngIf='real_estate.owner == "Agencija" && user.type == 2'>
+            <td><button routerLink='/agent/manageRealEstate/updateRealEstate'>Uredi nekretninu</button></td>
+        </tr>
+
+    </table>
+
+    <div class="row">
+        <div class="col-sm-3" *ngFor='let g of real_estate.gallery'>
+            <img src='{{g}}' width='250'>
+        </div>
+    </div>
+
+</div>

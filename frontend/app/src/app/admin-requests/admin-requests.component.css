@@ -1,0 +1,19 @@
+h1 {
+    margin-top: 50px;
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.container {
+    margin-bottom: 50px;
+}
+
+table {
+    background-color: rgb(229, 240, 243);
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+td {
+    padding: 10px;
+}

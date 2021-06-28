@@ -4,6 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.OfferController = void 0;
+const contract_1 = __importDefault(require("../models/contract"));
 const offer_1 = __importDefault(require("../models/offer"));
 class OfferController {
     constructor() {
@@ -15,13 +16,6 @@ class OfferController {
                     res.json(offers);
             });
         };
-        /*findOffers = (req: express.Request, res: express.Response) => {
-            if (req.body)
-            Offer.find({}, (err, offers) => {
-                if (err) console.log(err);
-                else res.json(offers);
-            })
-        } */
         this.makeOffer = (req, res) => {
             offer_1.default.collection.insertOne({
                 'realestate': req.body.realestate,
@@ -55,29 +49,6 @@ class OfferController {
                     });
                 }
             });
-            /*
-            Offer.collection.updateOne({ '_id': o_id }, { $set: { 'accepted': true } }, (err, offer) => {
-                if (err) {
-                    res.status(400).json({ 'message': 'offer not accepted' });
-                    console.log(err);
-                } else {
-                    Offer.collection.updateMany({
-                        $and: [
-                                { 'realestate': req.body.realestate },
-                                { '_id': { $ne: req.body.offer_id } }
-                            ]
-                    }, {
-                        $set: { 'accepted': false }
-                    }, (err, offer) => {
-                        if (err) {
-                            res.status(400).json({ 'message': 'offer accepted, offers not declined' });
-                            console.log(err);
-                        } else {
-                            res.status(200).json({ 'message': 'offer accepted, offers declined' });
-                        }
-                    });
-                }
-            }) */
         };
         this.declineOffer = (req, res) => {
             var mongo = require('mongodb');
@@ -123,6 +94,14 @@ class OfferController {
                             res.status(200).json({ 'message': 'offer deleted' });
                     });
                 }
+            });
+        };
+        this.getAllContracts = (req, res) => {
+            contract_1.default.find({}, (err, contracts) => {
+                if (err)
+                    console.log(err);
+                else
+                    res.json(contracts);
             });
         };
     }

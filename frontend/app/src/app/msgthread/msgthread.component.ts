@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
 import { MessagesService } from '../messages.service';
 import { Block } from '../models/block';
 import { Message } from '../models/message';
@@ -23,7 +24,8 @@ export class MsgthreadComponent implements OnInit {
     private userService: UserService,
     private offerService: OfferService,
     private realEstateService: RealEstateService,
-    private notif: MatSnackBar) { }
+    private notif: MatSnackBar,
+    private router: Router) { }
 
   thread: MsgThread;
   loggedUser: User;
@@ -41,6 +43,8 @@ export class MsgthreadComponent implements OnInit {
   ngOnInit(): void {
     this.thread = JSON.parse(localStorage.getItem('currentThread'));
     this.loggedUser = JSON.parse(localStorage.getItem('loggedUser'));
+    if (this.loggedUser == null || (this.loggedUser != null && this.loggedUser.type != 1 && this.loggedUser.type != 2))
+      this.router.navigate(['/pageNotFound']);
     let myRealEstate: Array<string> = JSON.parse(localStorage.getItem('myRealEstate'));
     this.owner = myRealEstate.includes(this.thread.realestate);
     this.block = null;
@@ -83,6 +87,11 @@ export class MsgthreadComponent implements OnInit {
     this.realEstateService.getAllRealEstateService().subscribe((data: RealEstate[]) => {
       this.realestate = data.find(r => r._id == this.thread.realestate);
     });
+  }
+
+  logOut(): void {
+    localStorage.clear();
+    this.router.navigate(['']);
   }
 
   send(): void {
@@ -202,10 +211,10 @@ export class MsgthreadComponent implements OnInit {
           this.offerService.validateOfferService(this.offer._id).subscribe();          
           this.realEstateService.sellRealEstateService(
             this.thread.realestate,
-            this.realestate.sale,
             this.offer.owner,
             this.offer.client,
-            this.offer.amount
+            this.offer.amount,
+            this.realestate.sale
           ).subscribe();
         }
 

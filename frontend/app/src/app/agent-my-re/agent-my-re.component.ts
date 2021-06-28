@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { RealEstate } from '../models/real-estate';
+import { User } from '../models/user';
 import { RealEstateService } from '../real-estate.service';
 
 @Component({
@@ -17,8 +18,13 @@ export class AgentMyReComponent implements OnInit {
     private notif: MatSnackBar) { }
 
   my_real_estate: RealEstate[];
+  user: User;
 
   ngOnInit(): void {
+    this.user = JSON.parse(localStorage.getItem('loggedUser'));
+    localStorage.removeItem('viewRealEstate');
+    if (this.user == null || (this.user != null && this.user.type != 2))
+      this.router.navigate(['/pageNotFound']);
     this.realEstateService.getAllRealEstateService().subscribe((data:RealEstate[]) => {
       this.my_real_estate = data.filter(re => re.owner == "Agencija");
       for ( let i: number = 0; i < data.length; i++) {
@@ -33,6 +39,11 @@ export class AgentMyReComponent implements OnInit {
     })
   }
 
+  logOut(): void {
+    localStorage.clear();
+    this.router.navigate(['']);
+  }
+  
   openPage(selectedRealEstate): void {
     localStorage.setItem('viewRealEstate', JSON.stringify(selectedRealEstate));
     this.router.navigate(['/realestate']);

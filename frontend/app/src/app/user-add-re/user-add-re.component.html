@@ -1,6 +1,30 @@
+<nav class="navbar navbar-light bg-light">
+    <ul class="nav nav-pills">
+        <li class="nav-item">
+            <a class="nav-link" routerLink='/user'>Početna</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" routerLink='/user/myRealEstate'>Moje nekretnine</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link active" routerLink='/user/addRealEstate'>Dodaj nekretninu</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" routerLink='/user/update'>Moj nalog</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" routerLink='/inbox'>Poruke</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" (click)='logOut()' routerLink=''>Odjavi se</a>
+        </li>
+    </ul>
+</nav>
+
+<div class="container">
 <table>
 
-    <th><h1>Dodaj novu nekretninu</h1></th>
+    <h1>Dodaj novu nekretninu</h1>
 
     <tr>
         <td>Izdavanje ili prodaja:</td>
@@ -93,7 +117,7 @@
     <tr *ngIf='new_re.sale!=null'>
         <td *ngIf='new_re.sale==0'>Cena mesečnog najma:</td>
         <td *ngIf='new_re.sale==1'>Cena:</td>
-        <input type='number' name='price' [(ngModel)]='new_re.price'>
+        <td><input type='number' name='price' [(ngModel)]='new_re.price'></td>
     </tr>
 
     <tr>
@@ -110,3 +134,5 @@
     </tr>
 
 </table>
+
+</div>

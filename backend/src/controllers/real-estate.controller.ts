@@ -2,6 +2,8 @@ import express from 'express'
 import Rent from '../models/rent';
 import Contract from '../models/contract';
 import RealEstate from '../models/real-estate'
+import MsgThread from '../models/msgthread';
+import Offer from '../models/offer';
 
 export class RealEstateController {
 
@@ -20,14 +22,6 @@ export class RealEstateController {
                 res.status(200).json({ 'message': 'real estate added' });
             }
         });
-        /*
-        let real_estate = new RealEstate(req.body);
-        //insertovanje objekata u mongo bazu:
-        real_estate.save().then((real_estate)=>{
-            res.status(200).json({'message': 'real estate added'});
-        }).catch((err)=>{
-            res.status(400).json({'message': err});
-        })*/
     }
 
     updateRealEstate = (req: express.Request, res: express.Response) => {
@@ -70,8 +64,13 @@ export class RealEstateController {
                 console.log(err);
                 res.status(400).json({ 'message': 'real estate not deleted' });
             }
-            if (data)
+            if (data) {
+                Contract.collection.deleteMany({'realestate': req.body._id});
+                MsgThread.collection.deleteMany({'realestate': req.body._id});
+                Offer.collection.deleteMany({'realestate': req.body._id});
+                Rent.collection.deleteMany({'realestate': req.body._id});
                 res.status(200).json({ 'message': 'real estate deleted' });
+            }
         });
     }
 
@@ -118,7 +117,12 @@ export class RealEstateController {
     }
 
     sellRealEstate = (req: express.Request, res: express.Response) => {
-        Contract.collection.insertOne(req.body, (err, data) => {
+        Contract.collection.insertOne({
+            'realestate': req.body.realestate,
+            'owner': req.body.owner,
+            'client': req.body.client,
+            'price': req.body.price
+        }, (err, data) => {
             if (err) {
                 console.log(err);
             } else {
@@ -144,8 +148,35 @@ export class RealEstateController {
     reserve = (req: express.Request, res: express.Response) => {
         Rent.collection.insertOne(req.body, (err, data) => {
             if (err) console.log(err);
-            else res.status(200).json({'message': 'reserved'});
+            else res.status(200).json({ 'message': 'reserved' });
         })
     }
 
+    validateRent = (req: express.Request, res: express.Response) => {
+        var mongo = require('mongodb');
+        var o_id = new mongo.ObjectID(req.body.rent_id);
+        Rent.collection.updateOne({ _id: o_id }, { $set: { valid: true } }, (err, data) => {
+            if (err) console.log(err);
+            else {
+                Contract.collection.insertOne({
+                    'realestate': req.body.realestate,
+                    'owner': req.body.owner,
+                    'client': req.body.client,
+                    'price': req.body.price
+                }, (err, data) => {
+                    if (err) console.log(err);
+                    else res.status(200).json({ 'message': 'rent validated' });
+                })
+            }
+        })
+    }
+
+    deleteRent = (req: express.Request, res: express.Response) => {
+        var mongo = require('mongodb');
+        var o_id = new mongo.ObjectID(req.body.rent_id);
+        Rent.collection.deleteOne({ _id: o_id }, (err, data) => {
+            if (err) console.log(err);
+            else res.status(200).json({ 'message': 'rent deleted' });
+        })
+    }
 }

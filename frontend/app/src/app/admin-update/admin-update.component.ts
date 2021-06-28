@@ -21,9 +21,12 @@ export class AdminUpdateComponent implements OnInit {
   emailRegex: RegExp;
 
   ngOnInit(): void {
+    let user = JSON.parse(localStorage.getItem('loggedUser'));
+    if (user == null || (user != null && user.type != 0))
+      this.router.navigate(['/pageNotFound']);
     this.emailRegex = new RegExp("^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$");
     this.userService.getAllUsersFromService().subscribe((data:User[]) => {
-      this.users = data;
+      this.users = data.filter(u => u.username != 'admin' && u.active == true);
     })
     this.updateDataFlag = false;
   }

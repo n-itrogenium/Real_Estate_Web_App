@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Chart } from 'chart.js';
 import { RealEstate } from '../models/real-estate';
+import { User } from '../models/user';
 import { RealEstateService } from '../real-estate.service';
 
 @Component({
@@ -10,9 +12,16 @@ import { RealEstateService } from '../real-estate.service';
 })
 export class AgentComponent implements OnInit {
 
-  constructor(private realEstateService: RealEstateService) { }
+  constructor(
+    private realEstateService: RealEstateService,
+    private router: Router) { }
+
+  user: User;
 
   ngOnInit(): void {
+    this.user = JSON.parse(localStorage.getItem('loggedUser'));
+    if (this.user == null || (this.user != null && this.user.type != 2))
+      this.router.navigate(['/pageNotFound']);
     this.realEstateService.getAllRealEstateService().subscribe((data: RealEstate[]) => {
       data = data.filter(re => re.approved == true);
       this.showRentPriceChart(data.filter(re => re.sale == 0));
@@ -21,6 +30,11 @@ export class AgentComponent implements OnInit {
       this.showApartmentChart(data.filter(re => re.type == 1));
       this.showHouseChart(data.filter(re => re.type == 0));
     });
+  }
+
+  logOut(): void {
+    localStorage.clear();
+    this.router.navigate(['']);
   }
 
   rentPriceChart: Chart;
@@ -69,7 +83,7 @@ export class AgentComponent implements OnInit {
           DBdata.filter(re => re.price >= 300_000).length
         ],
         fill: false,
-        backgroundColor: 'rgb(190, 110, 219)',
+        backgroundColor: 'rgb(110, 194, 219)',
         tension: 0.1
       }]
     };
@@ -90,10 +104,10 @@ export class AgentComponent implements OnInit {
           DBdata.filter(re => re.city == 'Novi Sad').length,
           DBdata.filter(re => re.city == 'Niš').length,
           DBdata.filter(re => re.city == 'Kragujevac').length,
-          DBdata.filter(re => re.city == 'Ostalo').length
+          DBdata.filter(re => re.city != 'Beograd' && re.city != 'Novi Sad' && re.city != 'Niš' && re.city != 'Kragujevac').length
         ],
         fill: true,
-        backgroundColor: 'rgb(219, 110, 164)',
+        backgroundColor: 'rgb(110, 194, 219)',
         tension: 0.1
       }]
     };
@@ -114,7 +128,7 @@ export class AgentComponent implements OnInit {
           DBdata.filter(re => re.sale == 0).length
         ],
         fill: false,
-        backgroundColor: 'rgb(82, 217, 143)',
+        backgroundColor: 'rgb(110, 194, 219)',
         tension: 0.1
       }]
     };
@@ -146,7 +160,7 @@ export class AgentComponent implements OnInit {
           DBdata.filter(re => re.sale == 0).length
         ],
         fill: false,
-        backgroundColor: 'rgb(224, 174, 99)',
+        backgroundColor: 'rgb(110, 194, 219)',
         tension: 0.1
       }]
     };

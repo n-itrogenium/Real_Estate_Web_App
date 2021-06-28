@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
 import { RealEstate } from '../models/real-estate';
+import { User } from '../models/user';
 import { RealEstateService } from '../real-estate.service';
 
 @Component({
@@ -12,15 +14,26 @@ export class AgentAddReComponent implements OnInit {
 
   constructor(
     private notif: MatSnackBar,
-    private realEstateService: RealEstateService) { }
+    private realEstateService: RealEstateService,
+    private router: Router) { }
 
   new_re: RealEstate;
   alreadyPushed: boolean;
 
+  user: User;
+
   ngOnInit(): void {
+    this.user = JSON.parse(localStorage.getItem('loggedUser'));
+    if (this.user == null || (this.user != null && this.user.type != 2))
+      this.router.navigate(['/pageNotFound']);
     this.new_re = new RealEstate;
     this.new_re.gallery = new Array;
     this.alreadyPushed = false;
+  }
+
+  logOut(): void {
+    localStorage.clear();
+    this.router.navigate(['']);
   }
 
   onFileSelectedGallery(event) {

@@ -1,180 +1,262 @@
-<a routerLink='myRealEstate'>Pregledaj nekretnine u vlasništvu agencije</a>
-<br>
+<nav class="navbar navbar-light bg-light">
+    <ul class="nav nav-pills">
+        <li class="nav-item">
+            <a class="nav-link" routerLink='/agent'>Početna</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link active" routerLink='/agent/manageRealEstate'>Upravljaj nekretninama</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" routerLink='/agent/manageRealEstate/myRealEstate'>Nekretnine agencije</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" routerLink='/agent/addRealEstate'>Dodaj nekretninu</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" routerLink='/agent/update'>Moj nalog</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" routerLink='/inbox'>Poruke</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" (click)='logOut()' routerLink=''>Odjavi se</a>
+        </li>
+    </ul>
+</nav>
 
-<!-----------------------------ZAHTEVI ZA NOVE NEKRETNINE----------------------------->
+<nav class="navbar navbar-light">
+    <ul class="nav nav-pills">
+        <li class="nav-item">
+            <a class="nav-link" (click)='requests()'>Zahtevi</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" (click)='active()'>Aktivne nekretnine</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" (click)='contractInfo()'>Ugovori i prihod</a>
+        </li>
 
-<h1>Zahtevi za nove nekretnine</h1>
+    </ul>
+</nav>
 
-<ng-container *ngFor='let re of real_estate'>
-    <table *ngIf='!re.approved'>
-        <tr>
-            <td>{{re.name}}</td>
-        </tr>
+<div class="container">
 
-        <tr>
-            <td>{{re.address}}, {{re.municipality}}, {{re.city}}</td>
-        </tr>
+    <div class="row" *ngIf="requestsFlag">
+        <!-----------------------------ZAHTEVI ZA NOVE NEKRETNINE----------------------------->
+        <div class="col-sm-6">
+            <h1>Zahtevi za nove nekretnine</h1>
 
-        <tr>
-            <td *ngIf='re.sale==0'>Izdavanje</td>
-            <td *ngIf='re.sale==1'>Prodaja</td>
-        </tr>
+            <ng-container *ngFor='let re of real_estate'>
+                <table *ngIf='!re.approved'
+                style="background-color: rgb(229, 240, 243); border-radius: 10px; margin-bottom: 20px;">
+                    <tr>
+                        <td>{{re.name}}</td>
+                    </tr>
 
-        <tr>
-            <td>Tip:</td>
-            <td *ngIf='re.type==0'>Kuća</td>
-            <td *ngIf='re.type==1'>Stan</td>
-        </tr>
+                    <tr>
+                        <td>{{re.address}}, {{re.municipality}}, {{re.city}}</td>
+                    </tr>
 
-        <tr>
-            <td *ngIf='re.type==0'>Broj spratova:</td>
-            <td *ngIf='re.type==1'>Broj spratova zgrade:</td>
-            <td>{{re.height}}</td>
-        </tr>
+                    <tr>
+                        <td *ngIf='re.sale==0'>Izdavanje</td>
+                        <td *ngIf='re.sale==1'>Prodaja</td>
+                    </tr>
 
-        <tr>
-            <td *ngIf='re.type==1'>Sprat:</td>
-            <td>{{re.floor}}</td>
-        </tr>
+                    <tr>
+                        <td>Tip:</td>
+                        <td *ngIf='re.type==0'>Kuća</td>
+                        <td *ngIf='re.type==1'>Stan</td>
+                    </tr>
 
-        <tr>
-            <td>Kvadratura:</td>
-            <td>{{re.squaremeters}} m2</td>
-        </tr>
+                    <tr>
+                        <td *ngIf='re.type==0'>Broj spratova:</td>
+                        <td *ngIf='re.type==1'>Broj spratova zgrade:</td>
+                        <td>{{re.height}}</td>
+                    </tr>
 
-        <tr>
-            <td>Broj soba:</td>
-            <td *ngIf='re.rooms==0'>Garsonjera</td>
-            <td *ngIf='re.rooms>0'>{{re.rooms}}</td>
-        </tr>
+                    <tr>
+                        <td *ngIf='re.type==1'>Sprat:</td>
+                        <td>{{re.floor}}</td>
+                    </tr>
 
-        <tr>
-            <td>Namešten:</td>
-            <td *ngIf='re.furnished'>Da</td>
-            <td *ngIf='!re.furnished'>Ne</td>
-        </tr>
+                    <tr>
+                        <td>Kvadratura:</td>
+                        <td>{{re.squaremeters}} m2</td>
+                    </tr>
 
-        <tr>
-            <td *ngIf='re.sale==0'>Cena mesečnog najma:</td>
-            <td *ngIf='re.sale==1'>Cena:</td>
-            <td>{{re.price}} €</td>
-        </tr>
+                    <tr>
+                        <td>Broj soba:</td>
+                        <td *ngIf='re.rooms==0'>Garsonjera</td>
+                        <td *ngIf='re.rooms>0'>{{re.rooms}}</td>
+                    </tr>
 
-        <tr>
-            <td>Vlasnik:</td>
-            <td>{{re.owner}}</td>
-        </tr>
+                    <tr>
+                        <td>Namešten:</td>
+                        <td *ngIf='re.furnished'>Da</td>
+                        <td *ngIf='!re.furnished'>Ne</td>
+                    </tr>
 
-        <tr>
-            <td><button (click)='approveRealEstate(re)'>Odobri</button></td>
-            <td><button (click)='deleteRealEstate(re)'>Odbaci</button></td>
-            <td><button (click)='openPage(re)'>Pregledaj nekretninu</button></td>
-        </tr>
+                    <tr>
+                        <td *ngIf='re.sale==0'>Cena mesečnog najma:</td>
+                        <td *ngIf='re.sale==1'>Cena:</td>
+                        <td>{{re.price}} €</td>
+                    </tr>
+
+                    <tr>
+                        <td>Vlasnik:</td>
+                        <td>{{re.owner}}</td>
+                    </tr>
+
+                    <tr>
+                        <td><button (click)='approveRealEstate(re)'>Odobri</button></td>
+                        <td><button (click)='deleteRealEstate(re)'>Odbaci</button></td>
+                        <td><button (click)='openPage(re)'>Pregledaj nekretninu</button></td>
+                    </tr>
 
 
 
-        <br><br><br>
-    </table>
-</ng-container>
-
-<!-----------------------------UGOVORENE PRODAJE----------------------------->
-<h1>Ugovorene prodaje</h1>
-
-<table>
-    <tr style='background-color:cadetblue'>
-        <th>Nekretnina</th>
-        <th>Vlasnik</th>
-        <th>Kupac</th>
-        <th>Cena</th>
-        <th>Akcija</th>
-    </tr>
-    <tr *ngFor='let o of offers' style='background-color:burlywood'>
-        <div *ngFor='let re of real_estate'>
-            <td *ngIf='re._id == o.realestate'>{{re.name}}</td>
+                    <br><br><br>
+                </table>
+            </ng-container>
         </div>
-        <td>{{o.owner}}</td>
-        <td>{{o.client}}</td>
-        <td>{{o.amount}}</td>
-        <td>
-            <button (click)='validateOffer(o)'>Odobri</button>
-            <button (click)='deleteOffer(o)'>Odbaci</button>
-        </td>
-    </tr>
-</table>
+
+        <!------------------------UGOVORENE PRODAJE NA ČEKANJU------------------------>
+        <div class="col-sm-6">
+            <h1>Ugovorene prodaje na čekanju</h1>
+
+            <table>
+                <tr style='background-color:lightblue; text-align: center'>
+                    <th>Nekretnina</th>
+                    <th>Vlasnik</th>
+                    <th>Kupac</th>
+                    <th>Cena</th>
+                    <th>Akcija</th>
+                </tr>
+                <tr *ngFor='let o of offers' style='background-color:rgb(236, 236, 236)'>
+                    <td>
+                        <div *ngFor='let re of real_estate'>
+                            <div *ngIf='re._id == o.realestate'>{{re.name}}</div>
+                        </div>
+                    </td>
+                    <td>{{o.owner}}</td>
+                    <td>{{o.client}}</td>
+                    <td>{{o.amount}}</td>
+                    <td>
+                        <button (click)='validateOffer(o)'>Odobri</button>
+                        <button (click)='deleteOffer(o)'>Odbaci</button>
+                    </td>
+                </tr>
+            </table>
+
+            <!---------------------------REZERVACIJE NA ČEKANJU--------------------------->
 
 
-<!-----------------------------AKTIVNE NEKRETNINE----------------------------->
+            <h1>Rezervacije na čekanju</h1>
 
-<h1>Aktivne nekretnine</h1>
+            <table>
+                <tr style='background-color:lightblue; text-align: center'>
+                    <th>Nekretnina</th>
+                    <th>Klijent</th>
+                    <th>Početni datum</th>
+                    <th>Krajnji datum</th>
+                    <th>Akcija</th>
+                </tr>
+                <tr *ngFor='let r of rents' style='background-color:rgb(236, 236, 236)'>
+                    <td>
+                        <div *ngFor='let re of real_estate'>
+                            <div *ngIf='re._id == r.realestate'>{{re.name}}</div>
+                        </div>
+                    </td>
+                    <td>{{r.client}}</td>
+                    <td>{{r.startdate | date: 'dd. MM. yyyy.'}}</td>
+                    <td>{{r.enddate | date: 'dd. MM. yyyy.'}}</td>
+                    <td>
+                        <button (click)='validateRent(r)'>Odobri</button>
+                        <button (click)='deleteRent(r)'>Odbaci</button>
+                    </td>
+                </tr>
+            </table>
 
-<ng-container *ngFor='let re of real_estate'>
-    <table *ngIf='re.approved'>
-        <tr>
-            <td>{{re.name}}</td>
-        </tr>
+        </div>
 
-        <tr>
-            <td>{{re.address}}, {{re.municipality}}, {{re.city}}</td>
-        </tr>
+    </div>
 
-        <tr>
-            <td *ngIf='re.sale==0'>Izdavanje</td>
-            <td *ngIf='re.sale==1'>Prodaja</td>
-        </tr>
+    <!-----------------------------UGOVORENE PRODAJE------------------------------>
 
-        <tr>
-            <td>Tip:</td>
-            <td *ngIf='re.type==0'>Kuća</td>
-            <td *ngIf='re.type==1'>Stan</td>
-        </tr>
+    <div *ngIf="contractInfoFlag">
+        <h1>Svi ugovori</h1>
+        <h2>Ukupan prihod agencije: {{income}} €</h2>
 
-        <tr>
-            <td *ngIf='re.type==0'>Broj spratova:</td>
-            <td *ngIf='re.type==1'>Broj spratova zgrade:</td>
-            <td>{{re.height}}</td>
-        </tr>
+        <table>
+            <tr style='background-color:lightblue; text-align: center'>
+                <th>Nekretnina</th>
+                <th>Vlasnik</th>
+                <th>Kupac</th>
+                <th>Cena</th>
+            </tr>
+            <tr *ngFor='let c of contracts' style='background-color:rgb(236, 236, 236)'>
+                <td>
+                    <div *ngFor='let re of real_estate'>
+                        <div *ngIf='re._id == c.realestate'>{{re.name}}</div>
+                    </div>
+                </td>
+                <td>{{c.owner}}</td>
+                <td>{{c.client}}</td>
+                <td>{{c.price}}</td>
+            </tr>
+        </table>
+    </div>
 
-        <tr>
-            <td *ngIf='re.type==1'>Sprat:</td>
-            <td>{{re.floor}}</td>
-        </tr>
+    <!-----------------------------AKTIVNE NEKRETNINE----------------------------->
 
-        <tr>
-            <td>Kvadratura:</td>
-            <td>{{re.squaremeters}} m2</td>
-        </tr>
+    <div *ngIf="activeFlag">
+        <h1>Aktivne nekretnine</h1>
 
-        <tr>
-            <td>Broj soba:</td>
-            <td *ngIf='re.rooms==0'>Garsonjera</td>
-            <td *ngIf='re.rooms>0'>{{re.rooms}}</td>
-        </tr>
+        <ng-container *ngFor='let re of real_estate'>
+            <div class="card" *ngIf='re.approved'>
+                <table>
+                    <tr>
+                        <img src='{{re.gallery[0]}}' height='200'>
+                    </tr>
 
-        <tr>
-            <td>Namešten:</td>
-            <td *ngIf='re.furnished'>Da</td>
-            <td *ngIf='!re.furnished'>Ne</td>
-        </tr>
+                    <tr style='font-weight: bold; font-size: 20px; color:rgb(68, 162, 224)'>
+                        <td>{{re.name}}</td>
+                    </tr>
 
-        <tr>
-            <td *ngIf='re.sale==0'>Cena mesečnog najma:</td>
-            <td *ngIf='re.sale==1'>Cena:</td>
-            <td>{{re.price}} €</td>
-        </tr>
+                    <tr *ngIf='re.sold'>
+                        <td style='font-weight: bold; color:red'>PRODATO</td>
+                    </tr>
 
-        <tr>
-            <td>Vlasnik:</td>
-            <td>{{re.owner}}</td>
-        </tr>
+                    <tr>
+                        <td>{{re.address}}, {{re.municipality}}, {{re.city}}</td>
+                    </tr>
 
-        <tr>
-            <td *ngIf='!re.promo'><button (click)='promoteRealEstate(re)'>Promoviši</button></td>
-            <td *ngIf='re.promo'><button (click)='removeFromPromoted(re)'>Ukloni iz promovisanih</button></td>
-            <td><button (click)='openPage(re)'>Pregledaj nekretninu</button></td>
-        </tr>
+                    <tr>
+                        <td *ngIf='re.sale==0'>Izdavanje</td>
+                        <td *ngIf='re.sale==1'>Prodaja</td>
+                    </tr>
 
+                    <tr>
+                        <td *ngIf='re.type==0'>Tip: Kuća</td>
+                        <td *ngIf='re.type==1'>Tip: Stan</td>
+                    </tr>
+                    <tr>
+                        <td *ngIf='re.sale==0'>Cena mesečnog najma: {{re.price}} €</td>
+                        <td *ngIf='re.sale==1'>Cena: {{re.price}} €</td>
+                    </tr>
 
+                    <tr>
+                        <td><button *ngIf='!re.promo && (re.sale == 0 || re.sale == 1 && !re.sold)'
+                                (click)='promoteRealEstate(re)'>Promoviši</button>
+                            <button *ngIf='re.promo && (re.sale == 0 || re.sale == 1 && !re.sold)'
+                                (click)='removeFromPromoted(re)'>Ukloni iz promovisanih</button>
+                            <button (click)='openPage(re)'>Pregledaj nekretninu</button>
+                        </td>
+                    </tr>
 
-        <br><br><br>
-    </table>
-</ng-container>
+                    <br><br><br>
+                </table>
+            </div>
+        </ng-container>
+    </div>
+</div>

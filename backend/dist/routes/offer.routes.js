@@ -15,5 +15,6 @@ offerRouter.route('/acceptOffer').post((req, res) => new offer_controller_1.Offe
 offerRouter.route('/declineOffer').post((req, res) => new offer_controller_1.OfferController().declineOffer(req, res));
 offerRouter.route('/validateOffer').post((req, res) => new offer_controller_1.OfferController().validateOffer(req, res));
 offerRouter.route('/deleteOffer').post((req, res) => new offer_controller_1.OfferController().deleteOffer(req, res));
+offerRouter.route('/getAllContracts').get((req, res) => new offer_controller_1.OfferController().getAllContracts(req, res));
 exports.default = offerRouter;
 //# sourceMappingURL=offer.routes.js.map

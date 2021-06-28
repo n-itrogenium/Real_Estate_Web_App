@@ -26,8 +26,14 @@ export class AdminAddComponent implements OnInit {
   new_re: RealEstate;
   alreadyPushed: boolean;
   users: User[];
+  reg_users: User[];
 
   ngOnInit(): void {
+    let user = JSON.parse(localStorage.getItem('loggedUser'));
+    if (user == null) alert('user null');
+    if (user != null && user.type != 0) alert('ovo drugo');
+    if (user == null || (user != null && user.type != 0))
+      this.router.navigate(['/pageNotFound']);
     this.new_re = new RealEstate;
     this.new_re.gallery = new Array;
     this.alreadyPushed = false;
@@ -35,6 +41,7 @@ export class AdminAddComponent implements OnInit {
     this.emailRegex = new RegExp("^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$");
     this.userService.getAllUsersFromService().subscribe((data:User[]) => {
       this.users = data.filter(user => user.username != "admin");
+      this.reg_users = data.filter(user => user.type == 1 && user.active == true);
     })
   }
 

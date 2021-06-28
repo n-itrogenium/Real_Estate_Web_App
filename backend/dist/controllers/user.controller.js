@@ -20,7 +20,6 @@ class UserController {
         };
         this.register = (req, res) => {
             let user = new user_1.default(req.body);
-            //insertovanje objekata u mongo bazu:
             user.save().then((user) => {
                 res.status(200).json({ 'message': 'user added' });
             }).catch((err) => {

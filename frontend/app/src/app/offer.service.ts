@@ -14,15 +14,6 @@ export class OfferService {
     return this.http.get(`${this.uri}/offer/getAllOffers`);
   }
 
-  /*findOffersService(realestate, owner, client) {
-    const data = {
-      realestate: realestate,
-      owner: owner,
-      client: client
-    }
-    return this.http.post(`${this.uri}/offer/findOffers`, data);
-  }*/
-
   makeOfferService(realestate, owner, client, amount) {
     const data = {
       realestate: realestate,
@@ -61,6 +52,10 @@ export class OfferService {
       realestate: realestate
     }
     return this.http.post(`${this.uri}/offer/deleteOffer`, data);
+  }
+
+  getAllContractsService() {
+    return this.http.get(`${this.uri}/offer/getAllContracts`);
   }
   
 }

@@ -1,77 +1,107 @@
-<form>
-    <tr>
-        <td>Odaberi korisnika:</td>
-        <td>
-           <select name='user' (change)='requestUpdateData()' [(ngModel)]='selectedUsername'>
-               <option value='{{u.username}}' *ngFor='let u of users'>{{u.username}}</option>
-           </select>
-        </td>
-    <tr>
+<nav class="navbar navbar-light bg-light">
+    <ul class="nav nav-pills">
+        <li class="nav-item">
+            <a class="nav-link" routerLink='/admin'>Početna</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" routerLink='/admin/requests'>Pregledaj zahteve</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link active" routerLink='/admin/update'>Upravljaj korisnicima</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" routerLink='/admin/add'>Dodaj korisnika ili nekretninu</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" (click)='logOut()' routerLink=''>Odjavi se</a>
+        </li>
+    </ul>
+</nav>
 
-    <tr>
-        <td>
-            <button (click)='deleteUser()'>Obriši korisnika</button>
-        </td>
-    </tr>
-</form>
+<div class="container">
+    <div class="row">
+        <div class="col-sm-6">
+            <h1>Upravljaj korisnicima</h1>
+            <form>
+                <tr>
+                    <td>Odaberi korisnika:</td>
+                    <td>
+                        <select name='user' (change)='requestUpdateData()' [(ngModel)]='selectedUsername'>
+                            <option value='{{u.username}}' *ngFor='let u of users'>{{u.username}}</option>
+                        </select>
+                    </td>
+                <tr>
 
+                <tr>
+                    <td>
+                        <button (click)='deleteUser()'>Obriši korisnika</button>
+                    </td>
+                </tr>
+            </form>
 
-<!--------------------------------AŽURIRANJE PODATAKA-------------------------------->
+        </div>
 
+        <!--------------------------------AŽURIRANJE PODATAKA-------------------------------->
 
-<form *ngIf='updateDataFlag'>
-    <th>Ažuriranje podataka korisnika {{selectedUsername}}</th>
-    <tr>
-        <td>Odaberite kategoriju:</td>
-        <td>
-            <select name='type' value='{{selectedUser.type}}' [(ngModel)]='selectedUser.type'>
-                <option value="1">Korisnik</option>
-                <option value="2">Agent</option>
-            </select>
-        </td>
-    </tr>
-    <tr>
-        <td>Ime:</td>
-        <td>
-            <input type='text' name='name' value='{{selectedUser.name}}' [(ngModel)]='selectedUser.name'>
-        </td>
-    </tr>
-    <tr>
-        <td>Prezime:</td>
-        <td>
-            <input type='text' name='surname' value='{{selectedUser.surname}}' [(ngModel)]='selectedUser.surname'>
-        </td>
-    </tr>
-    
-    <tr>
-        <td>Profilna slika:</td> 
-        <td><img src='{{selectedUser.avatar}}' height='100'></td>
-        <td>
-            <input type='file' name='avatar' accept='image/*' (change)='onFileSelected($event)'>
-        </td>
-    </tr>
+        <div class="col-sm-6">
+            <form *ngIf='updateDataFlag'>
+                <h1>Ažuriranje podataka korisnika {{selectedUsername}}</h1>
+                <tr>
+                    <td>Odaberite kategoriju:</td>
+                    <td>
+                        <select name='type' value='{{selectedUser.type}}' [(ngModel)]='selectedUser.type'>
+                            <option value="1">Korisnik</option>
+                            <option value="2">Agent</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Ime:</td>
+                    <td>
+                        <input type='text' name='name' value='{{selectedUser.name}}' [(ngModel)]='selectedUser.name'>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Prezime:</td>
+                    <td>
+                        <input type='text' name='surname' value='{{selectedUser.surname}}'
+                            [(ngModel)]='selectedUser.surname'>
+                    </td>
+                </tr>
 
-    <tr>
-        <td>E-mail adresa:</td>
-        <td>
-            <input type='text' name='mail' value='{{selectedUser.mail}}' [(ngModel)]='selectedUser.mail'>
-        </td>
-    </tr>
-    <tr>
-        <td>Mesto stanovanja:</td>
-        <td>
-            <input type='text' name='city' value='{{selectedUser.city}}' [(ngModel)]='selectedUser.city'>
-        </td>
-    </tr>
-    <tr>
-        <td>Država:</td>
-        <td>
-            <input type='text' name='country' value='{{selectedUser.country}}' [(ngModel)]='selectedUser.country'>
-        </td>
-    </tr>
-    <tr>
-        <td colspan="2">
-            <button (click)='updateUser()'>Ažuriraj podatke</button>
-        </td>
-    </tr>
-</form>
+                <tr>
+                    <td>Profilna slika:</td>
+                    <td><img src='{{selectedUser.avatar}}' height='100'></td>
+                    <td>
+                        <input type='file' name='avatar' accept='image/*' (change)='onFileSelected($event)'>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>E-mail adresa:</td>
+                    <td>
+                        <input type='text' name='mail' value='{{selectedUser.mail}}' [(ngModel)]='selectedUser.mail'>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Mesto stanovanja:</td>
+                    <td>
+                        <input type='text' name='city' value='{{selectedUser.city}}' [(ngModel)]='selectedUser.city'>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Država:</td>
+                    <td>
+                        <input type='text' name='country' value='{{selectedUser.country}}'
+                            [(ngModel)]='selectedUser.country'>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <button (click)='updateUser()'>Ažuriraj podatke</button>
+                    </td>
+                </tr>
+            </form>
+        </div>
+    </div>
+</div>

@@ -16,5 +16,7 @@ realEstateRouter.route('/removeFromPromoted').post((req, res) => new real_estate
 realEstateRouter.route('/sellRealEstate').post((req, res) => new real_estate_controller_1.RealEstateController().sellRealEstate(req, res));
 realEstateRouter.route('/getRents').get((req, res) => new real_estate_controller_1.RealEstateController().getRents(req, res));
 realEstateRouter.route('/reserve').post((req, res) => new real_estate_controller_1.RealEstateController().reserve(req, res));
+realEstateRouter.route('/validateRent').post((req, res) => new real_estate_controller_1.RealEstateController().validateRent(req, res));
+realEstateRouter.route('/deleteRent').post((req, res) => new real_estate_controller_1.RealEstateController().deleteRent(req, res));
 exports.default = realEstateRouter;
 //# sourceMappingURL=real-estate.routes.js.map

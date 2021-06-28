@@ -6,6 +6,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.AdminController = void 0;
 const user_1 = __importDefault(require("../models/user"));
 const percentage_1 = __importDefault(require("../models/percentage"));
+const block_1 = __importDefault(require("../models/block"));
+const contract_1 = __importDefault(require("../models/contract"));
+const message_1 = __importDefault(require("../models/message"));
+const msgthread_1 = __importDefault(require("../models/msgthread"));
+const real_estate_1 = __importDefault(require("../models/real-estate"));
+const rent_1 = __importDefault(require("../models/rent"));
 class AdminController {
     constructor() {
         this.grantAccess = (req, res) => {
@@ -27,18 +33,21 @@ class AdminController {
         };
         this.deleteUser = (req, res) => {
             let username = req.body.username;
-            user_1.default.findOne({ 'username': username }, (err, user) => {
-                if (err) {
+            user_1.default.collection.deleteOne({ 'username': username }, (err, data) => {
+                if (err)
                     console.log(err);
-                }
                 else {
-                    if (user) {
-                        user_1.default.collection.deleteOne({ 'username': username });
-                        res.status(200).json({ 'message': 'user deleted' });
-                    }
-                    else {
-                        res.status(400).json({ 'message': 'user not found' });
-                    }
+                    block_1.default.collection.deleteMany({ 'blocker': username });
+                    block_1.default.collection.deleteMany({ 'blocked': username });
+                    contract_1.default.collection.deleteMany({ 'owner': username });
+                    contract_1.default.collection.deleteMany({ 'client': username });
+                    message_1.default.collection.deleteMany({ 'to': username });
+                    message_1.default.collection.deleteMany({ 'from': username });
+                    msgthread_1.default.collection.deleteMany({ 'user1': username });
+                    msgthread_1.default.collection.deleteMany({ 'user2': username });
+                    real_estate_1.default.collection.deleteMany({ 'owner': username });
+                    rent_1.default.collection.deleteMany({ 'client': username });
+                    res.status(200).json({ 'message': 'user deleted' });
                 }
             });
         };
@@ -90,18 +99,6 @@ class AdminController {
                     res.json(percentage);
             });
         };
-        /*
-            denyAccess = (req: express.Request, res: express.Response) => {
-                let user = new User(req.body); // u zahtevu već imamo te podatke, pa samo uzimamo telo req
-                //insertovanje objekata u mongo bazu:
-                user.save().then((user)=>{
-                    res.status(200).json({'message': 'user added'});
-                }).catch((err)=>{
-                    res.status(400).json({'message': err});
-                })
-                //then: ako je sve ispravno, pošalji kod 200 za ispravno izvršenje i vrati poruku u json formatu da je korisnik dodat
-                //catch: ako je došlo do greške, vrati koja je to greška
-            }*/
     }
 }
 exports.AdminController = AdminController;

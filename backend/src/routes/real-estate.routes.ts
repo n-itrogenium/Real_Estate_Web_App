@@ -43,5 +43,13 @@ realEstateRouter.route('/reserve').post(
     (req, res) => new RealEstateController().reserve(req, res)
 )
 
+realEstateRouter.route('/validateRent').post(
+    (req, res) => new RealEstateController().validateRent(req, res)
+)
+
+realEstateRouter.route('/deleteRent').post(
+    (req, res) => new RealEstateController().deleteRent(req, res)
+)
+
 
 export default realEstateRouter;

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
 import { RealEstate } from '../models/real-estate';
 import { Rent } from '../models/rent';
 import { User } from '../models/user';
@@ -14,10 +15,12 @@ export class RealEstateComponent implements OnInit {
 
   constructor(
     private realEstateService: RealEstateService,
-    private notif: MatSnackBar) { }
+    private notif: MatSnackBar,
+    private router: Router) { }
 
   real_estate: RealEstate;
   user: User;
+  gallery_index: number[] = [];
 
   day1: number;
   month1: number;
@@ -30,6 +33,9 @@ export class RealEstateComponent implements OnInit {
   message: string;
   free: boolean = false;
 
+  part: number;
+  pay: boolean = false;
+
   days: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
     11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
     21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31];
@@ -39,6 +45,16 @@ export class RealEstateComponent implements OnInit {
   ngOnInit(): void {
     this.real_estate = JSON.parse(localStorage.getItem('viewRealEstate'));
     this.user = JSON.parse(localStorage.getItem('loggedUser'));
+    if (this.user == null || (this.user != null && this.user.type != 1 && this.user.type != 2))
+      this.router.navigate(['/pageNotFound']);
+    this.part = this.real_estate.price * 20 / 100;
+    for (let i = 0; i < this.real_estate.gallery.length; i++)
+      this.gallery_index.push(i);
+  }
+
+  logOut(): void {
+    localStorage.clear();
+    this.router.navigate(['']);
   }
 
   checkDate(): void {
@@ -63,7 +79,7 @@ export class RealEstateComponent implements OnInit {
     let date2 = new Date(this.year2 + "-" + this.month2 + "-" + this.day2);
 
     this.realEstateService.getRentsService().subscribe((data: Rent[]) => {
-      data = data.filter(rent => rent.realestate == this.real_estate._id);
+      data = data.filter(rent => rent.valid == true && rent.realestate == this.real_estate._id);
       for (let i = 0; i < data.length; i++) {
         let startdate = new Date(data[i].startdate);
         let enddate = new Date(data[i].enddate);
@@ -93,6 +109,10 @@ export class RealEstateComponent implements OnInit {
     }, error => {
       this.notif.open("Rezervacija nije ostvarena! Pokušajte ponovo.", "OK");
     })
+  }
+
+  participation(): void {
+    this.pay = !this.pay;
   }
 
 }

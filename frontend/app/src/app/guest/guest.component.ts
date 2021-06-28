@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { RealEstate } from '../models/real-estate';
 import { RealEstateService } from '../real-estate.service';
 
@@ -9,14 +10,21 @@ import { RealEstateService } from '../real-estate.service';
 })
 export class GuestComponent implements OnInit {
 
-  constructor(private realEstateService: RealEstateService) { }
+  constructor(
+    private realEstateService: RealEstateService,
+    private router: Router) { }
 
   real_estate: RealEstate[];
+  promo: RealEstate[];
   //result_real_estate: RealEstate[];
 
   ngOnInit(): void {
+    let user = JSON.parse(localStorage.getItem('loggedUser'));
+    if (user != null)
+      this.router.navigate(['/pageNotFound']);
     this.realEstateService.getAllRealEstateService().subscribe((data:RealEstate[]) => {
       this.real_estate = data.filter(re => re.approved == true && re.sold == false);
+      this.promo =data.filter(re => re.approved == true && re.sold == false && re.promo == true);
       //this.result_real_estate = data;
       for ( let i: number = 0; i < data.length; i++) {
         if (this.real_estate[i].gallery != null) {
@@ -46,36 +54,24 @@ export class GuestComponent implements OnInit {
   applyMaxPriceFilter: boolean;
 
   search(): void {
-    //this.result_real_estate = this.real_estate;
     this.applyCityFilter = false;
     this.applyMinPriceFilter = false;
     this.applyMaxPriceFilter = false;
 
     if (this.searchCity != null && this.searchCity != "") {
-      //this.searchCity = city;
       this.findCity = this.searchCity;
       this.applyCityFilter = true;
-      //this.result_real_estate = this.result_real_estate.filter(re => re.city == this.searchCity);
     }
 
     if (this.minPrice != null) {
-      //this.minPrice = min;
       this.findMinPrice = this.minPrice;
       this.applyMinPriceFilter = true;
     }
     
     if (this.maxPrice != null) {
-      //this.maxPrice = max;
       this.findMaxPrice = this.maxPrice;
       this.applyMaxPriceFilter = true;
     }
-
-    /*if (this.minPrice != null || this.maxPrice != null) {
-      if (this.minPrice == null) this.minPrice = 0;
-      if (this.maxPrice == null) this.maxPrice = Number.MAX_SAFE_INTEGER;
-      //this.result_real_estate = this.result_real_estate.filter(re => (re.price >= this.minPrice && re.price <= this.maxPrice));
-      this.applyPriceFilter = true;
-    }*/
  
   }
 

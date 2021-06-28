@@ -1,99 +1,144 @@
-<button routerLink='/composeMessage'>Nova poruka</button>
-<br><br>
+<div *ngIf='user.type == 1'>
+    <nav class="navbar navbar-light bg-light">
+        <ul class="nav nav-pills">
+            <li class="nav-item">
+                <a class="nav-link" routerLink='/user'>Početna</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" routerLink='/user/myRealEstate'>Moje nekretnine</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" routerLink='/user/addRealEstate'>Dodaj nekretninu</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" routerLink='/user/update'>Moj nalog</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link active" routerLink='/inbox'>Poruke</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" (click)='logOut()' routerLink=''>Odjavi se</a>
+            </li>
+        </ul>
+    </nav>
+</div>
 
-<button (click)='changeTab("active")'>Konverzacije</button>
-<button (click)='changeTab("archive")'>Arhiva</button>
-<br><br>
+<div *ngIf='user.type == 2'>
+    <nav class="navbar navbar-light bg-light">
+        <ul class="nav nav-pills">
+            <li class="nav-item">
+                <a class="nav-link" routerLink='/agent'>Početna</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" routerLink='/agent/manageRealEstate'>Upravljaj nekretninama</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" routerLink='/agent/manageRealEstate/myRealEstate'>Nekretnine agencije</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" routerLink='/agent/addRealEstate'>Dodaj nekretninu</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" routerLink='/agent/update'>Moj nalog</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link active" routerLink='/inbox'>Poruke</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" (click)='logOut()' routerLink=''>Odjavi se</a>
+            </li>
+        </ul>
+    </nav>
+</div>
 
-<!-------------------------------AKTIVNE KONVERZACIJE------------------------------->
+<div class="container">
+    <h1>Poruke</h1>
+    <button routerLink='/composeMessage'>Nova poruka</button>
+    <br><br>
 
-<ng-container *ngIf='currentTab=="active"'>
-    <h1>Aktivne poruke</h1>
-    <table *ngFor='let t of threads'>
-        <ng-container *ngIf='t.active'>
+    <button (click)='changeTab("active")'>Konverzacije</button>
+    <button (click)='changeTab("archive")'>Arhiva</button>
+    <br><br>
 
-            <tr>
-                <td>
-                    <a routerLink='/msgthread' (click)='openThread(t)'>{{t.subject}}</a>
-                </td>
-            </tr>
+    <!-------------------------------AKTIVNE KONVERZACIJE------------------------------->
 
-            <tr *ngIf='user.type == 1'>
-                <td *ngIf='t.user1 != user.username'>
-                    <p *ngIf='t.realestate == null'>{{t.user1}}<br></p>
-                    <p *ngIf='!t.read2' style='color: red'>NEPROČITANO</p>
-                </td>
+    <ng-container *ngIf='currentTab=="active"'>
+        <h1>Aktivne poruke</h1>
+        <table *ngFor='let t of threads'>
+            <div class="thread" *ngIf='t.active'>
 
-                <td *ngIf='t.user2 != user.username'>
-                    <p *ngIf='t.realestate == null'>{{t.user2}}<br></p>
-                    <p *ngIf='!t.read1' style='color: red'>NEPROČITANO</p>
-                </td>
-            </tr>
+                <tr>
+                    <td>
+                        <a routerLink='/msgthread' (click)='openThread(t)'>{{t.subject}}</a>
+                    </td>
+                </tr>
 
-            <tr *ngIf='user.type == 2'>
-                <p *ngIf='(t.user1 == "Agencija" && !t.read1) ||
+                <tr *ngIf='user.type == 1'>
+                    <td *ngIf='t.user1 != user.username'>
+                        <p *ngIf='t.realestate == null'>{{t.user1}}<br></p>
+                        <p *ngIf='!t.read2' style='color: red'>NEPROČITANO</p>
+                    </td>
+
+                    <td *ngIf='t.user2 != user.username'>
+                        <p *ngIf='t.realestate == null'>{{t.user2}}<br></p>
+                        <p *ngIf='!t.read1' style='color: red'>NEPROČITANO</p>
+                    </td>
+                </tr>
+
+                <tr *ngIf='user.type == 2'>
+                    <p *ngIf='(t.user1 == "Agencija" && !t.read1) ||
                 (t.user2 == "Agencija" && !t.read2)' style='color: red'>NEPROČITANO</p>
-            </tr>
+                </tr>
 
-            <tr>
-                <td>{{t.timestamp | date: 'dd. MM. yyyy. u HH.mm' }}</td>
-            </tr>
+                <tr>
+                    <td>{{t.timestamp | date: 'dd. MM. yyyy. u HH.mm' }}</td>
+                </tr>
 
-            <!--<tr>
-                <td>
-                    <button (click)='archiveThread(t)'>Arhiviraj konverzaciju</button>
-                </td>
-            </tr>-->
+            </div>
 
-        </ng-container>
-
-    </table>
-</ng-container>
+        </table>
+    </ng-container>
 
 
 
 
-<!-----------------------------ARHIVIRANE KONVERZACIJE------------------------------>
+    <!-----------------------------ARHIVIRANE KONVERZACIJE------------------------------>
 
-<ng-container *ngIf='currentTab=="archive"'>
-    <h1>Arhivirane poruke</h1>
-    <table *ngFor='let t of threads'>
-        <ng-container *ngIf='!t.active'>
+    <ng-container *ngIf='currentTab=="archive"'>
+        <h1>Arhivirane poruke</h1>
+        <table *ngFor='let t of threads'>
+            <div class="thread" *ngIf='!t.active'>
 
-            <tr>
-                <td>
-                    <a routerLink='/msgthread' (click)='openThread(t)'>{{t.subject}}</a>
-                </td>
-            </tr>
+                <tr>
+                    <td>
+                        <a routerLink='/msgthread' (click)='openThread(t)'>{{t.subject}}</a>
+                    </td>
+                </tr>
 
-            <tr *ngIf='user.type == 1'>
-                <td *ngIf='t.user1 != user.username'>
-                    <p *ngIf='t.realestate == null'>{{t.user1}}<br></p>
-                    <p *ngIf='!t.read2' style='color: red'>NEPROČITANO</p>
-                </td>
+                <tr *ngIf='user.type == 1'>
+                    <td *ngIf='t.user1 != user.username'>
+                        <p *ngIf='t.realestate == null'>{{t.user1}}<br></p>
+                        <p *ngIf='!t.read2' style='color: red'>NEPROČITANO</p>
+                    </td>
 
-                <td *ngIf='t.user2 != user.username'>
-                    <p *ngIf='t.realestate == null'>{{t.user2}}<br></p>
-                    <p *ngIf='!t.read1' style='color: red'>NEPROČITANO</p>
-                </td>
-            </tr>
+                    <td *ngIf='t.user2 != user.username'>
+                        <p *ngIf='t.realestate == null'>{{t.user2}}<br></p>
+                        <p *ngIf='!t.read1' style='color: red'>NEPROČITANO</p>
+                    </td>
+                </tr>
 
-            <tr *ngIf='user.type == 2'>
-                <p *ngIf='(t.user1 == "Agencija" && !t.read1) ||
+                <tr *ngIf='user.type == 2'>
+                    <p *ngIf='(t.user1 == "Agencija" && !t.read1) ||
                 (t.user2 == "Agencija" && !t.read2)' style='color: red'>NEPROČITANO</p>
-            </tr>
+                </tr>
 
-            <tr>
-                <td>{{t.timestamp | date: 'dd. MM. yyyy. u HH.mm' }}</td>
-            </tr>
+                <tr>
+                    <td>{{t.timestamp | date: 'dd. MM. yyyy. u HH.mm' }}</td>
+                </tr>
 
-            <!--<tr>
-                <td>
-                    <button (click)='archiveThread(t)'>Arhiviraj konverzaciju</button>
-                </td>
-            </tr>-->
+            </div>
 
-        </ng-container>
+        </table>
+    </ng-container>
 
-    </table>
-</ng-container>
+</div>

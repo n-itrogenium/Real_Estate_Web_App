@@ -1,16 +1,38 @@
-<a routerLink='manageRealEstate'>Upravljaj nekretninama</a>
-<br>
-<a routerLink='update'>Izmeni svoje podatke</a>
-<br>
-<a routerLink='addRealEstate'>Dodaj novu nekretninu</a>
-<br>
-<a routerLink='/inbox'>Poruke</a>
-<br>
+<nav class="navbar navbar-light bg-light">
+  <ul class="nav nav-pills">
+    <li class="nav-item">
+      <a class="nav-link active" routerLink='/agent'>Početna</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" routerLink='/agent/manageRealEstate'>Upravljaj nekretninama</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" routerLink='/agent/manageRealEstate/myRealEstate'>Nekretnine agencije</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" routerLink='/agent/addRealEstate'>Dodaj nekretninu</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" routerLink='/agent/update'>Moj nalog</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" routerLink='/inbox'>Poruke</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" (click)='logOut()' routerLink=''>Odjavi se</a>
+    </li>
+  </ul>
+</nav>
 
-<div class="row">
-    <div class="column"><canvas id="rentPriceChart" height="50"></canvas></div>
-    <div class="column"><canvas id="salePriceChart" height="50"></canvas></div>
-    <div class="column"><canvas id="cityChart" height="50"></canvas></div>
-    <div class="column"><canvas id="apartmentChart" height="50"></canvas></div>
-    <div class="column"><canvas id="houseChart" height="50"></canvas></div>
+<div class="container">
+  <h1>Analitika</h1>
+  <div class="row">
+    <div class="col-sm-4"><canvas id="rentPriceChart"></canvas></div>
+    <div class="col-sm-4"><canvas id="salePriceChart"></canvas></div>
+    <div class="col-sm-4"><canvas id="cityChart"></canvas></div>
+  </div>
+  <div class="row">
+    <div class="col-sm-4"><canvas id="apartmentChart"></canvas></div>
+    <div class="col-sm-4"><canvas id="houseChart"></canvas></div>
+  </div>
 </div>

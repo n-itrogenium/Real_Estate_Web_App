@@ -1,119 +1,150 @@
+<nav class="navbar navbar-light bg-light">
+    <ul class="nav nav-pills">
+        <li class="nav-item">
+            <a class="nav-link" routerLink='/user'>Početna</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link active" routerLink='/user/myRealEstate'>Moje nekretnine</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" routerLink='/user/addRealEstate'>Dodaj nekretninu</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" routerLink='/user/update'>Moj nalog</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" routerLink='/inbox'>Poruke</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" (click)='logOut()' routerLink=''>Odjavi se</a>
+        </li>
+    </ul>
+</nav>
+
 <!--------------------------------AŽURIRANJE PODATAKA-------------------------------->
+<div class="container">
+    <table>
 
-<table>
+        <th>
+            <h1>Uredi nekretninu</h1>
+        </th>
 
-    <th><h1>Uredi nekretninu</h1></th>
+        <tr>
+            <td>Izdavanje ili prodaja:</td>
+            <td>
+                <select name='sale' value='{{real_estate.sale}}' [(ngModel)]='real_estate.sale'>
+                    <option value="0">Izdavanje</option>
+                    <option value="1">Prodaja</option>
+                </select>
+            </td>
+        </tr>
 
-    <tr>
-        <td>Izdavanje ili prodaja:</td>
-        <td>
-            <select name='sale' value='{{real_estate.sale}}' [(ngModel)]='real_estate.sale'>
-                <option value="0">Izdavanje</option>
-                <option value="1">Prodaja</option>
-            </select>
-        </td>
-    </tr>
+        <tr>
+            <td>Opis nekretnine:</td>
+            <td>
+                <input type='text' name='name' value='{{real_estate.name}}' [(ngModel)]='real_estate.name'>
+            </td>
+        </tr>
 
-    <tr>
-        <td>Opis nekretnine:</td>
-        <td>
-            <input type='text' name='name' value='{{real_estate.name}}' [(ngModel)]='real_estate.name'>
-        </td>
-    </tr>
+        <tr>
+            <td>Adresa:</td>
+            <td>
+                <input type='text' name='address' value='{{real_estate.address}}' [(ngModel)]='real_estate.address'>
+            </td>
+        </tr>
 
-    <tr>
-        <td>Adresa:</td>
-        <td>
-            <input type='text' name='address' value='{{real_estate.address}}' [(ngModel)]='real_estate.address'>
-        </td>
-    </tr>
+        <tr>
+            <td>Grad:</td>
+            <td>
+                <input type='text' name='city' value='{{real_estate.city}}' [(ngModel)]='real_estate.city'>
+            </td>
+        </tr>
 
-    <tr>
-        <td>Grad:</td>
-        <td>
-            <input type='text' name='city' value='{{real_estate.city}}' [(ngModel)]='real_estate.city'>
-        </td>
-    </tr>
+        <tr>
+            <td>Opština:</td>
+            <td>
+                <input type='text' name='municipality' value='{{real_estate.municipality}}'
+                    [(ngModel)]='real_estate.municipality'>
+            </td>
+        </tr>
 
-    <tr>
-        <td>Opština:</td>
-        <td>
-            <input type='text' name='municipality' value='{{real_estate.municipality}}' [(ngModel)]='real_estate.municipality'>
-        </td>
-    </tr>
+        <tr>
+            <td>Tip:</td>
+            <td>
+                <select name='type' value='{{real_estate.type}}' [(ngModel)]='real_estate.type'>
+                    <option value="0">Kuća</option>
+                    <option value="1">Stan</option>
+                </select>
+            </td>
+        </tr>
 
-    <tr>
-        <td>Tip:</td>
-        <td>
-            <select name='type' value='{{real_estate.type}}' [(ngModel)]='real_estate.type'>
-                <option value="0">Kuća</option>
-                <option value="1">Stan</option>
-            </select>
-        </td>
-    </tr>
+        <tr *ngIf='real_estate.type!=null'>
+            <td *ngIf='real_estate.type==0'>Broj spratova:</td>
+            <td *ngIf='real_estate.type==1'>Broj spratova zgrade:</td>
+            <td>
+                <input type='number' name='height' value='{{real_estate.height}}' [(ngModel)]='real_estate.height'>
+            </td>
+        </tr>
 
-    <tr *ngIf='real_estate.type!=null'>
-        <td *ngIf='real_estate.type==0'>Broj spratova:</td>
-        <td *ngIf='real_estate.type==1'>Broj spratova zgrade:</td>
-        <td>
-            <input type='number' name='height' value='{{real_estate.height}}' [(ngModel)]='real_estate.height'>
-        </td>
-    </tr>
+        <tr *ngIf='real_estate.type==1'>
+            <td>Sprat:</td>
+            <td>
+                <input type='number' name='floor' value='{{real_estate.floor}}' [(ngModel)]='real_estate.floor'>
+            </td>
+        </tr>
 
-    <tr *ngIf='real_estate.type==1'>
-        <td>Sprat:</td>
-        <td>
-            <input type='number' name='floor' value='{{real_estate.floor}}' [(ngModel)]='real_estate.floor'>
-        </td>
-    </tr>
+        <tr>
+            <td>Kvadratura:</td>
+            <td>
+                <input type='number' name='squaremeters' value='{{real_estate.squaremeters}}'
+                    [(ngModel)]='real_estate.squaremeters'>
+            </td>
+        </tr>
 
-    <tr>
-        <td>Kvadratura:</td>
-        <td>
-            <input type='number' name='squaremeters' value='{{real_estate.squaremeters}}' [(ngModel)]='real_estate.squaremeters'>
-        </td>
-    </tr>
+        <tr>
+            <td>Broj soba:</td>
+            <td>
+                <input type='number' name='rooms' value='{{real_estate.rooms}}' [(ngModel)]='real_estate.rooms'>
+            </td>
+            <td>Garsonjera => 0 </td>
+        </tr>
 
-    <tr>
-        <td>Broj soba:</td>
-        <td>
-            <input type='number' name='rooms' value='{{real_estate.rooms}}' [(ngModel)]='real_estate.rooms'>
-        </td>
-        <td>Garsonjera => 0 </td>
-    </tr>
+        <tr>
+            <td>Nameštaj:</td>
+            <td>
+                <select name='furnished' value='{{real_estate.furnished}}' [(ngModel)]='real_estate.furnished'>
+                    <option value="true">Da</option>
+                    <option value="false">Ne</option>
+                </select>
+            </td>
+        </tr>
 
-    <tr>
-        <td>Nameštaj:</td>
-        <td>
-            <select name='furnished' value='{{real_estate.furnished}}' [(ngModel)]='real_estate.furnished'>
-                <option value="true">Da</option>
-                <option value="false">Ne</option>
-            </select>
-        </td>
-    </tr>
+        <tr *ngIf='real_estate.sale!=null'>
+            <td *ngIf='real_estate.sale==0'>Cena mesečnog najma:</td>
+            <td *ngIf='real_estate.sale==1'>Cena:</td>
+            <td><input type='number' name='price' value='{{real_estate.price}}' [(ngModel)]='real_estate.price'></td>
+        </tr>
+        <tr>
+            <td>Nova fotografija/video:</td>
+            <td>
+                <input type='file' name='gallery' accept='image/*, video/*' (change)='onFileSelected($event)'>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <button (click)='updateRealEstate()'>Ažuriraj nekretninu</button>
+            </td>
+        </tr>
 
-    <tr *ngIf='real_estate.sale!=null'>
-        <td *ngIf='real_estate.sale==0'>Cena mesečnog najma:</td>
-        <td *ngIf='real_estate.sale==1'>Cena:</td>
-        <input type='number' name='price' value='{{real_estate.price}}' [(ngModel)]='real_estate.price'>
-    </tr>
+    </table>
 
-    <tr>
-        <td *ngFor='let img of real_estate.gallery'>
-            <img src='{{img}}' height='100'>
-        </td>
-    </tr>
-    <tr>
-        <td>Nova fotografija/video:</td> 
-        <td>
-            <input type='file' name='gallery' accept='image/*, video/*' (change)='onFileSelected($event)'>
-        </td>
-    </tr>
+        <div class="row">
+            <div class="col-sm-3" *ngFor='let img of real_estate.gallery'>
+                <img src='{{img}}' width='250'>
+            </div>
+        </div>
 
-    <tr>
-        <td colspan="2">
-            <button (click)='updateRealEstate()'>Ažuriraj nekretninu</button>
-        </td>
-    </tr>
+        
 
-</table>
+   
+</div>

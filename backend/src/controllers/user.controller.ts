@@ -16,7 +16,6 @@ export class UserController{
 
     register = (req: express.Request, res: express.Response) => {
         let user = new User(req.body);
-        //insertovanje objekata u mongo bazu:
         user.save().then((user)=>{
             res.status(200).json({'message': 'user added'});
         }).catch((err)=>{

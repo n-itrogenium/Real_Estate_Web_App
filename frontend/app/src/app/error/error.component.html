@@ -1,3 +1,25 @@
+<div *ngIf='user.type == 0'>
+    <nav class="navbar navbar-light bg-light">
+        <ul class="nav nav-pills">
+          <li class="nav-item">
+            <a class="nav-link" routerLink='/admin'>Početna</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink='/admin/requests'>Pregledaj zahteve</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink='/admin/update'>Upravljaj korisnicima</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink='/admin/add'>Dodaj korisnika ili nekretninu</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" (click)='logOut()' routerLink=''>Odjavi se</a>
+          </li>
+        </ul>
+      </nav>
+</div>
+
 <div *ngIf='user.type == 1'>
     <nav class="navbar navbar-light bg-light">
         <ul class="nav nav-pills">
@@ -31,10 +53,10 @@
             </li>
             <li class="nav-item">
                 <a class="nav-link" routerLink='/agent/manageRealEstate'>Upravljaj nekretninama</a>
-            </li>
-            <li class="nav-item">
+              </li>
+              <li class="nav-item">
                 <a class="nav-link" routerLink='/agent/manageRealEstate/myRealEstate'>Nekretnine agencije</a>
-            </li>
+              </li>
             <li class="nav-item">
                 <a class="nav-link" routerLink='/agent/addRealEstate'>Dodaj nekretninu</a>
             </li>
@@ -51,41 +73,5 @@
     </nav>
 </div>
 
-<div class="container">
-    <form>
-        <h1 *ngIf='real_estate==null'>Kreiraj novu poruku</h1>
-        <h1 *ngIf='real_estate!=null'>Poruka za vlasnika nekretnine {{real_estate.name}}</h1>
+<h1>404 Page Not Found</h1>
 
-        <tr *ngIf='real_estate==null'>
-            <td>Primalac:</td>
-            <td><input type='text' name='to' [(ngModel)]='to'></td>
-        </tr>
-
-        <tr *ngIf='real_estate==null'>
-            <td>Naslov:</td>
-            <td><input type='text' name='subject' [(ngModel)]='subject'></td>
-        </tr>
-
-        <tr *ngIf='block == null'>
-            <td>Poruka:</td>
-            <td><textarea name='content' [(ngModel)]='content'></textarea></td>
-        </tr>
-
-        <tr *ngIf='block == null'>
-            <td colspan='2'>
-                <button (click)='send()'>Pošalji</button>
-            </td>
-        </tr>
-
-    </form>
-
-    <div *ngIf='block != null && block.blocker == user.username'>
-        <p>Nije moguće kontaktirati vlasnika zato što ste blokirali korisnika.</p>
-        <button (click)='unblockUser()'>Odblokiraj korisnika</button>
-    </div>
-
-    <p *ngIf='block != null && block.blocked == user.username'>Nije moguće kontaktirati vlasnika zato što Vas je
-        korisnik
-        blokirao.</p>
-
-</div>

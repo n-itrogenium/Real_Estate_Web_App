@@ -1,4 +1,5 @@
 import express from 'express';
+import Contract from '../models/contract';
 import Offer from '../models/offer'
 
 export class OfferController {
@@ -9,14 +10,6 @@ export class OfferController {
             else res.json(offers);
         })
     }
-
-    /*findOffers = (req: express.Request, res: express.Response) => {
-        if (req.body)
-        Offer.find({}, (err, offers) => {
-            if (err) console.log(err);
-            else res.json(offers);
-        })
-    } */
 
     makeOffer = (req: express.Request, res: express.Response) => {
         Offer.collection.insertOne({
@@ -50,30 +43,6 @@ export class OfferController {
                 })
             }
         })
-
-        /*
-        Offer.collection.updateOne({ '_id': o_id }, { $set: { 'accepted': true } }, (err, offer) => {
-            if (err) {
-                res.status(400).json({ 'message': 'offer not accepted' });
-                console.log(err);
-            } else {
-                Offer.collection.updateMany({
-                    $and: [
-                            { 'realestate': req.body.realestate },
-                            { '_id': { $ne: req.body.offer_id } }
-                        ]
-                }, {
-                    $set: { 'accepted': false }
-                }, (err, offer) => {
-                    if (err) {
-                        res.status(400).json({ 'message': 'offer accepted, offers not declined' });
-                        console.log(err);
-                    } else {
-                        res.status(200).json({ 'message': 'offer accepted, offers declined' });
-                    }
-                });
-            }
-        }) */
     }
 
     declineOffer = (req: express.Request, res: express.Response) => {
@@ -121,6 +90,13 @@ export class OfferController {
                         else res.status(200).json({ 'message': 'offer deleted' });
                     })
             }
+        })
+    }
+
+    getAllContracts = (req: express.Request, res: express.Response) => {
+        Contract.find({}, (err, contracts) => {
+            if (err) console.log(err);
+            else res.json(contracts);
         })
     }
 

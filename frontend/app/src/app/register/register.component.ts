@@ -19,6 +19,7 @@ export class RegisterComponent implements OnInit {
   emailRegex: RegExp;
 
   ngOnInit(): void {
+    localStorage.clear();
     this.passwordRegex = new RegExp("^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[@$!%*#?&]).{8,24}$");
     this.emailRegex = new RegExp("^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$");
   }

@@ -1,6 +1,12 @@
 import express from 'express';
 import User from '../models/user'
 import Percentage from '../models/percentage'
+import Block from '../models/block';
+import Contract from '../models/contract';
+import Message from '../models/message';
+import MsgThread from '../models/msgthread';
+import RealEstate from '../models/real-estate';
+import Rent from '../models/rent';
 
 export class AdminController {
     grantAccess = (req: express.Request, res: express.Response) => {
@@ -25,20 +31,23 @@ export class AdminController {
     deleteUser = (req: express.Request, res: express.Response) => {
         let username = req.body.username;
 
-        User.findOne({ 'username': username },
-            (err, user) => {
-                if (err) {
-                    console.log(err);
-                } else {
-                    if (user) {
-                        User.collection.deleteOne({ 'username': username });
-                        res.status(200).json({ 'message': 'user deleted' });
-                    }
-                    else {
-                        res.status(400).json({ 'message': 'user not found' });
-                    }
-                }
-            })
+        User.collection.deleteOne({ 'username': username }, (err, data) => {
+            if (err) console.log(err);
+            else {
+                Block.collection.deleteMany({ 'blocker': username });
+                Block.collection.deleteMany({ 'blocked': username });
+                Contract.collection.deleteMany({ 'owner': username });
+                Contract.collection.deleteMany({ 'client': username });
+                Message.collection.deleteMany({ 'to': username });
+                Message.collection.deleteMany({ 'from': username });
+                MsgThread.collection.deleteMany({ 'user1': username });
+                MsgThread.collection.deleteMany({ 'user2': username });
+                RealEstate.collection.deleteMany({ 'owner': username });
+                Rent.collection.deleteMany({ 'client': username });
+                res.status(200).json({ 'message': 'user deleted' });
+            }
+        });
+
     }
 
 
@@ -83,18 +92,4 @@ export class AdminController {
         })
     }
 
-
-
-    /*
-        denyAccess = (req: express.Request, res: express.Response) => {
-            let user = new User(req.body); // u zahtevu već imamo te podatke, pa samo uzimamo telo req
-            //insertovanje objekata u mongo bazu:
-            user.save().then((user)=>{
-                res.status(200).json({'message': 'user added'});
-            }).catch((err)=>{
-                res.status(400).json({'message': err});
-            })
-            //then: ako je sve ispravno, pošalji kod 200 za ispravno izvršenje i vrati poruku u json formatu da je korisnik dodat
-            //catch: ako je došlo do greške, vrati koja je to greška
-        }*/
 }

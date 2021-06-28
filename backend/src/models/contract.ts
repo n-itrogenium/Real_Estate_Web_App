@@ -11,10 +11,6 @@ let Contract = new Schema(
             type: String,
             required: true
         },
-        sale: {
-            type: Number,
-            required: true
-        },
         owner: {
             type: String,
             required: true

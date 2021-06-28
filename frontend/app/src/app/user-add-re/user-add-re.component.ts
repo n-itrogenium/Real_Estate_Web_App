@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { RealEstate } from '../models/real-estate';
+import { User } from '../models/user';
 import { RealEstateService } from '../real-estate.service';
 
 @Component({
@@ -13,16 +14,26 @@ export class UserAddReComponent implements OnInit {
 
   constructor(
     private notif: MatSnackBar,
-    private realEstateService: RealEstateService) { }
+    private realEstateService: RealEstateService,
+    private router: Router) { }
 
   new_re: RealEstate;
+  user: User;
 
   ngOnInit(): void {
+    this.user = JSON.parse(localStorage.getItem('loggedUser'));
+    if (this.user == null || this.user != null && this.user.type != 1)
+      this.router.navigate(['/pageNotFound']);
     this.new_re = new RealEstate;
     this.new_re.gallery = new Array;
     this.alreadyPushed = false;
     let owner = JSON.parse(localStorage.getItem('loggedUser'));
     this.new_re.owner = owner.username;
+  }
+
+  logOut(): void {
+    localStorage.clear();
+    this.router.navigate(['']);
   }
 
   alreadyPushed: boolean;

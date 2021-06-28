@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
 import { RealEstate } from '../models/real-estate';
+import { User } from '../models/user';
 import { RealEstateService } from '../real-estate.service';
 
 @Component({
@@ -12,13 +14,25 @@ export class AgentUpdateReComponent implements OnInit {
 
   constructor(
     private notif: MatSnackBar,
-    private realEstateService: RealEstateService) { }
+    private realEstateService: RealEstateService,
+    private router: Router) { }
 
   real_estate: RealEstate;
+  user: User;
 
   ngOnInit(): void {
+    this.user = JSON.parse(localStorage.getItem('loggedUser'));
+    if (this.user == null || (this.user != null && this.user.type != 2)) {
+      alert(this.user.type);
+      this.router.navigate(['/pageNotFound']);
+    }
     this.real_estate = JSON.parse(localStorage.getItem('viewRealEstate'));
     this.alreadyPushed = false;
+  }
+
+  logOut(): void {
+    localStorage.clear();
+    this.router.navigate(['']);
   }
 
   updateRealEstate(): void {

@@ -11,7 +11,11 @@ import offerRouter from './routes/offer.routes';
 const app = express();
 
 app.use(cors());
-app.use(bodyParser.json()); //podaci se razmenjuju u JSON formatu
+//app.use(bodyParser.json()); //podaci se razmenjuju u JSON formatu
+
+app.use(bodyParser.json({limit: '50mb'}));
+app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
+app.use(express.json());
 
 mongoose.connect('mongodb://localhost:27017/mydb');
 const connection = mongoose.connection;

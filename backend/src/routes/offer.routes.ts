@@ -6,10 +6,6 @@ offerRouter.route('/getAllOffers').get(
     (req, res) => new OfferController().getAllOffers(req, res)
 )
 
-/*offerRouter.route('/findOffers').post(
-    (req, res) => new OfferController().findOffers(req, res)
-); */
-
 offerRouter.route('/makeOffer').post(
     (req, res) => new OfferController().makeOffer(req, res)
 );
@@ -29,6 +25,10 @@ offerRouter.route('/validateOffer').post(
 offerRouter.route('/deleteOffer').post(
     (req, res) => new OfferController().deleteOffer(req, res)
 );
+
+offerRouter.route('/getAllContracts').get(
+    (req, res) => new OfferController().getAllContracts(req, res)
+)
 
 
 export default offerRouter;

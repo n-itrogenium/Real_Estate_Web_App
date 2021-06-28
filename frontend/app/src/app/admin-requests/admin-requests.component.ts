@@ -21,6 +21,9 @@ export class AdminRequestsComponent implements OnInit {
     private router: Router) { }
 
   ngOnInit(): void {
+    let user = JSON.parse(localStorage.getItem('loggedUser'));
+    if (user == null || (user != null && user.type != 0))
+      this.router.navigate(['/pageNotFound']);
     this.userService.getAllUsersFromService().subscribe((data:User[]) => {
       this.users = data.filter(user => user.active == false);
     });

@@ -1,0 +1,17 @@
+h1 {
+    margin-top: 50px;
+    font-weight: bold;
+    font-size: 20px;
+}
+
+td {
+    padding: 10px;
+}
+
+.container {
+    margin-bottom: 50px;
+}
+
+.col-sm-3 {
+    margin-top: 50px;
+}

@@ -7,6 +7,8 @@ exports.RealEstateController = void 0;
 const rent_1 = __importDefault(require("../models/rent"));
 const contract_1 = __importDefault(require("../models/contract"));
 const real_estate_1 = __importDefault(require("../models/real-estate"));
+const msgthread_1 = __importDefault(require("../models/msgthread"));
+const offer_1 = __importDefault(require("../models/offer"));
 class RealEstateController {
     constructor() {
         this.getAllRealEstate = (req, res) => {
@@ -26,14 +28,6 @@ class RealEstateController {
                     res.status(200).json({ 'message': 'real estate added' });
                 }
             });
-            /*
-            let real_estate = new RealEstate(req.body);
-            //insertovanje objekata u mongo bazu:
-            real_estate.save().then((real_estate)=>{
-                res.status(200).json({'message': 'real estate added'});
-            }).catch((err)=>{
-                res.status(400).json({'message': err});
-            })*/
         };
         this.updateRealEstate = (req, res) => {
             var mongo = require('mongodb');
@@ -71,8 +65,13 @@ class RealEstateController {
                     console.log(err);
                     res.status(400).json({ 'message': 'real estate not deleted' });
                 }
-                if (data)
+                if (data) {
+                    contract_1.default.collection.deleteMany({ 'realestate': req.body._id });
+                    msgthread_1.default.collection.deleteMany({ 'realestate': req.body._id });
+                    offer_1.default.collection.deleteMany({ 'realestate': req.body._id });
+                    rent_1.default.collection.deleteMany({ 'realestate': req.body._id });
                     res.status(200).json({ 'message': 'real estate deleted' });
+                }
             });
         };
         this.approveRealEstate = (req, res) => {
@@ -112,7 +111,12 @@ class RealEstateController {
             });
         };
         this.sellRealEstate = (req, res) => {
-            contract_1.default.collection.insertOne(req.body, (err, data) => {
+            contract_1.default.collection.insertOne({
+                'realestate': req.body.realestate,
+                'owner': req.body.owner,
+                'client': req.body.client,
+                'price': req.body.price
+            }, (err, data) => {
                 if (err) {
                     console.log(err);
                 }
@@ -143,6 +147,37 @@ class RealEstateController {
                     console.log(err);
                 else
                     res.status(200).json({ 'message': 'reserved' });
+            });
+        };
+        this.validateRent = (req, res) => {
+            var mongo = require('mongodb');
+            var o_id = new mongo.ObjectID(req.body.rent_id);
+            rent_1.default.collection.updateOne({ _id: o_id }, { $set: { valid: true } }, (err, data) => {
+                if (err)
+                    console.log(err);
+                else {
+                    contract_1.default.collection.insertOne({
+                        'realestate': req.body.realestate,
+                        'owner': req.body.owner,
+                        'client': req.body.client,
+                        'price': req.body.price
+                    }, (err, data) => {
+                        if (err)
+                            console.log(err);
+                        else
+                            res.status(200).json({ 'message': 'rent validated' });
+                    });
+                }
+            });
+        };
+        this.deleteRent = (req, res) => {
+            var mongo = require('mongodb');
+            var o_id = new mongo.ObjectID(req.body.rent_id);
+            rent_1.default.collection.deleteOne({ _id: o_id }, (err, data) => {
+                if (err)
+                    console.log(err);
+                else
+                    res.status(200).json({ 'message': 'rent deleted' });
             });
         };
     }

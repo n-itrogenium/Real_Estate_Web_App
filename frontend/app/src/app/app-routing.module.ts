@@ -10,6 +10,7 @@ import { AgentMyReComponent } from './agent-my-re/agent-my-re.component';
 import { AgentUpdateReComponent } from './agent-update-re/agent-update-re.component';
 import { AgentUpdateComponent } from './agent-update/agent-update.component';
 import { AgentComponent } from './agent/agent.component';
+import { ErrorComponent } from './error/error.component';
 import { GuestComponent } from './guest/guest.component';
 import { InboxComponent } from './inbox/inbox.component';
 import { LoginComponent } from './login/login.component';
@@ -45,7 +46,9 @@ const routes: Routes = [
   {path: 'msgthread', component: MsgthreadComponent},
   {path: 'composeMessage', component: MsgComposeComponent},
   {path: 'register', component: RegisterComponent},
-  {path: 'realestate', component: RealEstateComponent}
+  {path: 'realestate', component: RealEstateComponent},
+  {path: 'pageNotFound', component: ErrorComponent},
+  {path: '**', component: ErrorComponent}
 ];
 
 @NgModule({

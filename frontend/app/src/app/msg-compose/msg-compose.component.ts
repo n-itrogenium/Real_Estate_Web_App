@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
 import { MessagesService } from '../messages.service';
 import { Block } from '../models/block';
 import { MsgThread } from '../models/msgthread';
@@ -17,7 +18,8 @@ export class MsgComposeComponent implements OnInit {
   constructor(
     private msgService: MessagesService,
     private userService: UserService,
-    private notif: MatSnackBar) { }
+    private notif: MatSnackBar,
+    private router: Router) { }
 
   user: User;
   to: string;
@@ -29,6 +31,8 @@ export class MsgComposeComponent implements OnInit {
 
   ngOnInit(): void {
     this.user = JSON.parse(localStorage.getItem('loggedUser'));
+    if (this.user == null || (this.user != null && this.user.type != 1 && this.user.type != 2))
+      this.router.navigate(['/pageNotFound']);
     this.real_estate = JSON.parse(localStorage.getItem('viewRealEstate'));
     if (this.real_estate != null) {
       this.to = this.real_estate.owner;
@@ -46,6 +50,11 @@ export class MsgComposeComponent implements OnInit {
         }
       })
     }
+  }
+
+  logOut(): void {
+    localStorage.clear();
+    this.router.navigate(['']);
   }
 
   send(): void {

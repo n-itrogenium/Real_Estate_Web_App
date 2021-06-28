@@ -17,7 +17,8 @@ export class InboxComponent implements OnInit {
   constructor(
     private msgService: MessagesService,
     private realEstateService: RealEstateService,
-    private notif: MatSnackBar) { }
+    private notif: MatSnackBar,
+    private router: Router) { }
 
   currentTab: string;
   user: User;
@@ -25,6 +26,8 @@ export class InboxComponent implements OnInit {
 
   ngOnInit(): void {
     this.user = JSON.parse(localStorage.getItem('loggedUser'));
+    if (this.user == null || (this.user != null && this.user.type != 1 && this.user.type != 2))
+      this.router.navigate(['/pageNotFound']);
     localStorage.removeItem('viewRealEstate');
     this.currentTab = "active";
     this.threads = null;
@@ -55,6 +58,11 @@ export class InboxComponent implements OnInit {
         });
       });
       
+  }
+
+  logOut(): void {
+    localStorage.clear();
+    this.router.navigate(['']);
   }
 
   changeTab(tab): void {

@@ -16,6 +16,7 @@ export class LoginComponent implements OnInit {
     private notif: MatSnackBar) { }
 
   ngOnInit(): void {
+    localStorage.clear();
   }
 
   username: string;

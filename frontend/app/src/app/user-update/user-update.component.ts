@@ -27,6 +27,8 @@ export class UserUpdateComponent implements OnInit {
 
   ngOnInit(): void {
     this.user = JSON.parse(localStorage.getItem('loggedUser'));
+    if (this.user == null || this.user != null && this.user.type != 1)
+      this.router.navigate(['/pageNotFound']);
     this.passwordRegex = new RegExp("^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[@$!%*#?&]).{8,24}$");
     this.emailRegex = new RegExp("^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$");
 

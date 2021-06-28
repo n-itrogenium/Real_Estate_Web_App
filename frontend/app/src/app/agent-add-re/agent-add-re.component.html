@@ -1,112 +1,143 @@
-<table>
+<nav class="navbar navbar-light bg-light">
+    <ul class="nav nav-pills">
+        <li class="nav-item">
+            <a class="nav-link" routerLink='/agent'>Početna</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" routerLink='/agent/manageRealEstate'>Upravljaj nekretninama</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" routerLink='/agent/manageRealEstate/myRealEstate'>Nekretnine agencije</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link active" routerLink='/agent/addRealEstate'>Dodaj nekretninu</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" routerLink='/agent/update'>Moj nalog</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" routerLink='/inbox'>Poruke</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" (click)='logOut()' routerLink=''>Odjavi se</a>
+        </li>
+    </ul>
+</nav>
 
-    <th><h1>Dodaj novu nekretninu</h1></th>
+<div class="container">
+    <table>
 
-    <tr>
-        <td>Izdavanje ili prodaja:</td>
-        <td>
-            <select name='sale' [(ngModel)]='new_re.sale'>
-                <option value="0">Izdavanje</option>
-                <option value="1">Prodaja</option>
-            </select>
-        </td>
-    </tr>
+        <th>
+            <h1>Dodaj novu nekretninu</h1>
+        </th>
 
-    <tr>
-        <td>Opis nekretnine:</td>
-        <td>
-            <input type='text' name='name' [(ngModel)]='new_re.name'>
-        </td>
-    </tr>
+        <tr>
+            <td>Izdavanje ili prodaja:</td>
+            <td>
+                <select name='sale' [(ngModel)]='new_re.sale'>
+                    <option value="0">Izdavanje</option>
+                    <option value="1">Prodaja</option>
+                </select>
+            </td>
+        </tr>
 
-    <tr>
-        <td>Adresa:</td>
-        <td>
-            <input type='text' name='address' [(ngModel)]='new_re.address'>
-        </td>
-    </tr>
+        <tr>
+            <td>Opis nekretnine:</td>
+            <td>
+                <input type='text' name='name' [(ngModel)]='new_re.name'>
+            </td>
+        </tr>
 
-    <tr>
-        <td>Grad:</td>
-        <td>
-            <input type='text' name='city' [(ngModel)]='new_re.city'>
-        </td>
-    </tr>
+        <tr>
+            <td>Adresa:</td>
+            <td>
+                <input type='text' name='address' [(ngModel)]='new_re.address'>
+            </td>
+        </tr>
 
-    <tr>
-        <td>Opština:</td>
-        <td>
-            <input type='text' name='municipality' [(ngModel)]='new_re.municipality'>
-        </td>
-    </tr>
+        <tr>
+            <td>Grad:</td>
+            <td>
+                <input type='text' name='city' [(ngModel)]='new_re.city'>
+            </td>
+        </tr>
 
-    <tr>
-        <td>Tip:</td>
-        <td>
-            <select name='type' [(ngModel)]='new_re.type'>
-                <option value="0">Kuća</option>
-                <option value="1">Stan</option>
-            </select>
-        </td>
-    </tr>
+        <tr>
+            <td>Opština:</td>
+            <td>
+                <input type='text' name='municipality' [(ngModel)]='new_re.municipality'>
+            </td>
+        </tr>
 
-    <tr *ngIf='new_re.type'>
-        <td *ngIf='new_re.type==0'>Broj spratova:</td>
-        <td *ngIf='new_re.type==1'>Broj spratova zgrade:</td>
-        <td>
-            <input type='number' name='height' [(ngModel)]='new_re.height'>
-        </td>
-    </tr>
+        <tr>
+            <td>Tip:</td>
+            <td>
+                <select name='type' [(ngModel)]='new_re.type'>
+                    <option value="0">Kuća</option>
+                    <option value="1">Stan</option>
+                </select>
+            </td>
+        </tr>
 
-    <tr *ngIf='new_re.type==1'>
-        <td>Sprat:</td>
-        <td>
-            <input type='number' name='floor' [(ngModel)]='new_re.floor'>
-        </td>
-    </tr>
+        <tr *ngIf='new_re.type'>
+            <td *ngIf='new_re.type==0'>Broj spratova:</td>
+            <td *ngIf='new_re.type==1'>Broj spratova zgrade:</td>
+            <td>
+                <input type='number' name='height' [(ngModel)]='new_re.height'>
+            </td>
+        </tr>
 
-    <tr>
-        <td>Kvadratura:</td>
-        <td>
-            <input type='number' name='squaremeters' [(ngModel)]='new_re.squaremeters'>
-        </td>
-    </tr>
+        <tr *ngIf='new_re.type==1'>
+            <td>Sprat:</td>
+            <td>
+                <input type='number' name='floor' [(ngModel)]='new_re.floor'>
+            </td>
+        </tr>
 
-    <tr>
-        <td>Broj soba:</td>
-        <td>
-            <input type='number' name='rooms' [(ngModel)]='new_re.rooms'>
-        </td>
-        <td>Garsonjera => 0 </td>
-    </tr>
+        <tr>
+            <td>Kvadratura:</td>
+            <td>
+                <input type='number' name='squaremeters' [(ngModel)]='new_re.squaremeters'>
+            </td>
+        </tr>
 
-    <tr>
-        <td>Nameštaj:</td>
-        <td>
-            <select name='furnished' [(ngModel)]='new_re.furnished'>
-                <option value="true">Da</option>
-                <option value="false">Ne</option>
-            </select>
-        </td>
-    </tr>
+        <tr>
+            <td>Broj soba:</td>
+            <td>
+                <input type='number' name='rooms' [(ngModel)]='new_re.rooms'>
+            </td>
+            <td>Garsonjera => 0 </td>
+        </tr>
 
-    <tr *ngIf='new_re.sale!=null'>
-        <td *ngIf='new_re.sale==0'>Cena mesečnog najma:</td>
-        <td *ngIf='new_re.sale==1'>Cena:</td>
-        <input type='number' name='price' [(ngModel)]='new_re.price'>
-    </tr>
+        <tr>
+            <td>Nameštaj:</td>
+            <td>
+                <select name='furnished' [(ngModel)]='new_re.furnished'>
+                    <option value="true">Da</option>
+                    <option value="false">Ne</option>
+                </select>
+            </td>
+        </tr>
 
-    <tr>
-        <td>Fotografija/video:</td> 
-        <td>
-            <input type='file' name='gallery' accept='image/*, video/*' (change)='onFileSelectedGallery($event)'>
-        </td>
-    </tr>
+        <tr *ngIf='new_re.sale!=null'>
+            <td *ngIf='new_re.sale==0'>Cena mesečnog najma:</td>
+            <td *ngIf='new_re.sale==1'>Cena:</td>
+            <td><input type='number' name='price' [(ngModel)]='new_re.price'></td>
+        </tr>
 
-    <tr>
-        <td colspan="2">
-            <button (click)='addRealEstate()'>Dodaj nekretninu</button>
-        </td>
-    </tr>
+        <tr>
+            <td>Fotografija/video:</td>
+            <td>
+                <input type='file' name='gallery' accept='image/*, video/*' (change)='onFileSelectedGallery($event)'>
+            </td>
+        </tr>
 
-</table>
+        <tr>
+            <td colspan="2">
+                <button (click)='addRealEstate()'>Dodaj nekretninu</button>
+            </td>
+        </tr>
+
+    </table>
+
+</div>
